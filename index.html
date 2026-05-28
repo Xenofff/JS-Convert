@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JS-Convert — Privacy First</title>
+    <title>JS-Convert — Privacy First Local File Converter</title>
+    <meta name="description" content="Free browser-based file converter for images, PDF, JSON and CSV. 100% private — files never leave your device." />
+    <meta name="keywords" content="file converter, image converter, PDF converter, JSON to CSV, CSV to JSON, private converter, browser converter" />
+    <link rel="canonical" href="https://jsconvert.com/" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Добавлены необходимые библиотеки для конвертации -->
@@ -25,6 +28,8 @@
         .header-control { height: 40px; display: flex; align-items: center; justify-content: center; }
         .modal-animate { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        details.faq-item summary::-webkit-details-marker { display: none; }
+        details.faq-item summary::marker { content: ''; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
@@ -75,10 +80,10 @@
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
         <div class="p-8 md:p-12">
             <div class="grid md:grid-cols-2 gap-10 items-center">
-                <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+                <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
                     <input type="file" id="fileInput" class="hidden" multiple />
-                    <div class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all mb-4">
-                        <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                    <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+                        <i id="dropzoneUploadIcon" data-lucide="upload-cloud" class="w-8 h-8"></i>
                     </div>
                     <p id="dropText" class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center"></p>
                     <div id="filesList" class="mt-4 w-full max-h-32 overflow-y-auto space-y-1 hidden">
@@ -99,7 +104,8 @@
                             <option value="text/csv">CSV</option>
                         </select>
                     </div>
-                    <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+                    <p id="incompatibleWarning" class="hidden text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl px-4 py-3 text-center"></p>
+                    <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-brand disabled:active:scale-100 text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
                         <span id="btnText"></span>
                         <i data-lucide="arrow-right" class="w-5 h-5"></i>
                     </button>
@@ -111,6 +117,48 @@
             <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
         </div>
     </div>
+
+    <section id="faqSection" class="mt-16" aria-labelledby="faqTitle">
+        <h2 id="faqTitle" class="text-2xl font-black mb-8 text-center text-slate-800 dark:text-slate-100"></h2>
+        <div class="space-y-3">
+            <details class="faq-item group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-shadow hover:shadow-md hover:shadow-slate-200/50 dark:hover:shadow-none">
+                <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 font-bold text-sm text-slate-700 dark:text-slate-200">
+                    <span id="faqQ1"></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180"></i>
+                </summary>
+                <div class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <p id="faqA1"></p>
+                </div>
+            </details>
+            <details class="faq-item group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-shadow hover:shadow-md hover:shadow-slate-200/50 dark:hover:shadow-none">
+                <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 font-bold text-sm text-slate-700 dark:text-slate-200">
+                    <span id="faqQ2"></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180"></i>
+                </summary>
+                <div class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <p id="faqA2"></p>
+                </div>
+            </details>
+            <details class="faq-item group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-shadow hover:shadow-md hover:shadow-slate-200/50 dark:hover:shadow-none">
+                <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 font-bold text-sm text-slate-700 dark:text-slate-200">
+                    <span id="faqQ3"></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180"></i>
+                </summary>
+                <div class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <p id="faqA3"></p>
+                </div>
+            </details>
+            <details class="faq-item group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-shadow hover:shadow-md hover:shadow-slate-200/50 dark:hover:shadow-none">
+                <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 font-bold text-sm text-slate-700 dark:text-slate-200">
+                    <span id="faqQ4"></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180"></i>
+                </summary>
+                <div class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <p id="faqA4"></p>
+                </div>
+            </details>
+        </div>
+    </section>
 </main>
 
 <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-12">
@@ -200,7 +248,20 @@
             converting: 'Converting',
             of: 'of',
             complete: 'Complete!',
-            error: 'Error'
+            error: 'Error',
+            incompatibleWarning: 'Selected files are incompatible. Please upload only images/PDF, only JSON, or only CSV files.',
+            faqTitle: 'Frequently Asked Questions',
+            faqQ1: "How does serverless file conversion work?",
+            faqA1: "Unlike traditional online converters that upload your documents to remote cloud servers for processing, JS-Convert operates entirely on the client-side. This is made possible by modern HTML5 File API technologies and advanced browser capabilities. When you select your files, the browser allocates an isolated process within your local RAM and handles data manipulation locally using optimized JavaScript libraries. The internet connection is only utilized once to fetch the website's static assets and scripts. Once the page is fully loaded in your browser, you can completely disconnect from the network and continue converting files in full offline mode.",
+  
+            faqQ2: "Are there any file size limits or conversion quotas?",
+            faqA2: "Since JS-Convert does not rely on expensive server infrastructure, we do not impose artificial limits, premium paywalls, or daily file counts. You can process batches of documents completely free of charge. The primary and only constraint is the hardware capability of your own device (PC, laptop, or smartphone) and its available Random Access Memory (RAM). For stable processing of heavy PDF files or ultra-high-resolution images, we recommend using a device with at least 8 GB of RAM. If your browser tab crashes during a heavy task, it simply means your system ran out of local memory to handle that specific data volume.",
+  
+            faqQ3: "Is it safe to process confidential and private documents here?",
+            faqA3: "This is fundamentally the most secure method of converting files available on the web today. The application is built on a strict Privacy-First philosophy and provides native compliance with global data protection regulations like GDPR. Your personal data, passport scans, financial reports, proprietary CSV datasets, or private photos can never be leaked or intercepted because they physically never leave your local machine. Furthermore, our entire codebase is fully open-source and hosted on GitHub, allowing any developer or cybersecurity expert to audit the code and verify its absolute transparency and integrity.",
+  
+            faqQ4: "Why is this service completely free, and what is the catch?",
+            faqA4: "There is absolutely no catch. Standard online file converters are forced to introduce subscription models or aggressive restrictions because they incur massive ongoing costs for high-performance server maintenance and bandwidth. The decentralized architecture of JS-Convert offloads all computational tasks directly to the user's CPU. Because our server infrastructure costs are practically zero, we are proud to offer a premium, high-speed, and secure utility completely free of charge, with no watermarks, no registration, and no hidden fees."
         },
         ru: {
             subtitle: 'Поддержка изображений (PNG, JPG, WEBP), PDF, JSON и CSV. 100% приватно.',
@@ -226,11 +287,33 @@
             converting: 'Конвертация',
             of: 'из',
             complete: 'Готово!',
-            error: 'Ошибка'
+            error: 'Ошибка',
+            incompatibleWarning: 'Выбранные файлы несовместимы. Загружайте только изображения/PDF, только JSON или только CSV.',
+            faqTitle: 'Часто задаваемые вопросы',
+            faqQ1: 'Как работает конвертация без использования серверов?',
+            faqA1: 'В отличие от традиционных онлайн-сервисов, которые загружают ваши документы на удаленные облачные сервера для обработки, JS-Convert работает полностью на стороне клиента (Client-Side). Это стало возможным благодаря современным технологиям HTML5 File API и возможностям веб-браузеров. Когда вы добавляете файлы, браузер создает изолированный поток в оперативной памяти вашего устройства и обрабатывает данные локально с помощью оптимизированных JavaScript-библиотек. Сеть интернет используется исключительно один раз — для загрузки интерфейса и скриптов сайта. После полной загрузки страницы вы можете отключить интернет и продолжать конвертировать файлы в режиме офлайн.',
+            faqQ2: 'Существуют ли ограничения на размер и количество файлов?',
+            faqA2: 'Поскольку JS-Convert не использует дорогостоящие серверные мощности, у нас нет искусственных лимитов, подписок или ограничений на количество файлов в очереди. Вы можете конвертировать пакеты документов абсолютно бесплатно. Главным и единственным ограничителем выступает аппаратная мощность вашего собственного устройства (ПК, ноутбука или смартфона) и объем его оперативной памяти (RAM). Для стабильной обработки тяжелых PDF-документов или изображений в сверхвысоком разрешении рекомендуется использовать устройства с объемом RAM от 8 ГБ. Если браузер закроется во время процесса, это означает, что устройству не хватило памяти для обработки текущего объема данных.',
+            faqQ3: 'Насколько безопасно загружать сюда конфиденциальные документы?',
+            faqA3: 'Это самый безопасный способ конвертации файлов из всех существующих в интернете. Проект спроектирован по принципу Privacy-First (приватность превыше всего) и полностью соответствует строгим стандартам конфиденциальности, таким как GDPR и 152-ФЗ, прямо из коробки. Ваши персональные данные, сканы паспортов, коммерческие отчеты, базы данных в CSV или личные фотографии физически не могут попасть в чужие руки, потому что они никогда не покидают ваш компьютер. Исходный код проекта полностью открыт и опубликован на GitHub — любой разработчик или специалист по информационной безопасности может провести аудит и убедиться в абсолютной чистоте и прозрачности алгоритмов.',
+            faqQ4: 'Почему сервис полностью бесплатный и где подвох?',
+            faqA4: 'Никакого подвоха нет. Классические конвертеры вынуждены брать с пользователей плату или вводить жесткие лимиты (например, не более 2 файлов в день), потому что они тратят огромные деньги на аренду мощных серверов и оплату входящего трафика. Архитектура JS-Convert переносит всю вычислительную нагрузку на процессор пользователя. Наши затраты на содержание сайта практически равны нулю, что позволяет нам предоставлять качественный, быстрый и безопасный инструмент без подписок, скрытых платежей и водяных знаков на готовых документах.'
         }
     };
 
-    let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ru') ? 'ru' : 'en');
+    const FORMAT_OPTIONS = [
+        { value: 'image/png', group: 'media' },
+        { value: 'image/jpeg', group: 'media' },
+        { value: 'image/webp', group: 'media' },
+        { value: 'application/pdf', group: 'media' },
+        { value: 'application/json', group: 'csv' },
+        { value: 'text/csv', group: 'json' }
+    ];
+
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    let currentLang = (urlLang === 'en' || urlLang === 'ru')
+        ? urlLang
+        : (localStorage.getItem('lang') || (navigator.language.startsWith('ru') ? 'ru' : 'en'));
 
     function updateUI() {
         const t = i18n[currentLang];
@@ -251,6 +334,21 @@
 
         document.getElementById('modalTitle').textContent = t.modalTitle;
         document.getElementById('modalBody').innerHTML = t.modalContent;
+
+        document.getElementById('faqTitle').textContent = t.faqTitle;
+        document.getElementById('faqQ1').textContent = t.faqQ1;
+        document.getElementById('faqA1').textContent = t.faqA1;
+        document.getElementById('faqQ2').textContent = t.faqQ2;
+        document.getElementById('faqA2').textContent = t.faqA2;
+        document.getElementById('faqQ3').textContent = t.faqQ3;
+        document.getElementById('faqA3').textContent = t.faqA3;
+        document.getElementById('faqQ4').textContent = t.faqQ4;
+        document.getElementById('faqA4').textContent = t.faqA4;
+
+        const incompatibleWarning = document.getElementById('incompatibleWarning');
+        if (incompatibleWarning && !incompatibleWarning.classList.contains('hidden')) {
+            incompatibleWarning.textContent = t.incompatibleWarning;
+        }
 
         document.getElementById('langEn').className = `px-3 h-8 text-[10px] font-black rounded-lg transition-all ${currentLang === 'en' ? 'bg-white dark:bg-slate-700 shadow-sm text-brand' : 'text-slate-400 hover:text-slate-600'}`;
         document.getElementById('langRu').className = `px-3 h-8 text-[10px] font-black rounded-lg transition-all ${currentLang === 'ru' ? 'bg-white dark:bg-slate-700 shadow-sm text-brand' : 'text-slate-400 hover:text-slate-600'}`;
@@ -294,8 +392,82 @@
     const targetFormat = document.getElementById('targetFormat');
     const progressInner = document.getElementById('progressInner');
     const conversionStatus = document.getElementById('conversionStatus');
+    const incompatibleWarning = document.getElementById('incompatibleWarning');
+    const dropzoneIconWrap = document.getElementById('dropzoneIconWrap');
 
     let selectedFiles = [];
+    let fileStatuses = [];
+    let dragCounter = 0;
+
+    function classifyFile(file) {
+        const name = file.name.toLowerCase();
+        const type = file.type;
+        if (type.startsWith('image/') || /\.(png|jpe?g|webp|bmp|gif)$/i.test(name)) return 'media';
+        if (type === 'application/pdf' || name.endsWith('.pdf')) return 'media';
+        if (type === 'application/json' || name.endsWith('.json')) return 'json';
+        if (type === 'text/csv' || name.endsWith('.csv')) return 'csv';
+        return 'media';
+    }
+
+    function getUploadCategory() {
+        if (selectedFiles.length === 0) return null;
+        const categories = new Set(selectedFiles.map(classifyFile));
+        if (categories.size > 1) return 'incompatible';
+        return [...categories][0];
+    }
+
+    function updateFormatOptions() {
+        const category = getUploadCategory();
+        const options = targetFormat.querySelectorAll('option');
+        let firstEnabled = null;
+
+        FORMAT_OPTIONS.forEach((fmt, idx) => {
+            const option = options[idx];
+            if (!option) return;
+            let enabled = true;
+            if (category === 'media') enabled = fmt.group === 'media';
+            else if (category === 'json') enabled = fmt.value === 'text/csv';
+            else if (category === 'csv') enabled = fmt.value === 'application/json';
+            else if (category === 'incompatible') enabled = false;
+
+            option.disabled = !enabled;
+            if (enabled && firstEnabled === null) firstEnabled = fmt.value;
+        });
+
+        if (firstEnabled && targetFormat.querySelector(`option[value="${targetFormat.value}"]`)?.disabled) {
+            targetFormat.value = firstEnabled;
+        }
+
+        const incompatible = category === 'incompatible';
+        incompatibleWarning.classList.toggle('hidden', !incompatible);
+        if (incompatible) {
+            incompatibleWarning.textContent = i18n[currentLang].incompatibleWarning;
+        }
+        convertBtn.disabled = incompatible;
+    }
+
+    function setDropzoneDragActive(active) {
+        if (active) {
+            dropzone.classList.add('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+            dropzoneIconWrap.classList.add('text-brand', 'animate-bounce');
+        } else {
+            dropzone.classList.remove('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+            dropzoneIconWrap.classList.remove('text-brand', 'animate-bounce');
+        }
+    }
+
+    function getStatusIconConfig(status) {
+        switch (status) {
+            case 'converting':
+                return { icon: 'loader-2', classes: 'w-4 h-4 text-brand animate-spin flex-shrink-0' };
+            case 'success':
+                return { icon: 'check-circle', classes: 'w-4 h-4 text-emerald-500 flex-shrink-0' };
+            case 'error':
+                return { icon: 'x-circle', classes: 'w-4 h-4 text-red-500 flex-shrink-0' };
+            default:
+                return { icon: 'clock', classes: 'w-4 h-4 text-slate-400 flex-shrink-0' };
+        }
+    }
 
     // Открытие проводника при клике на dropzone
     dropzone.addEventListener('click', () => {
@@ -312,19 +484,29 @@
     });
 
     // Drag & drop
+    dropzone.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        dragCounter++;
+        if (dragCounter === 1) setDropzoneDragActive(true);
+    });
+
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropzone.classList.add('border-brand', 'bg-brand/5');
     });
 
     dropzone.addEventListener('dragleave', (e) => {
         e.preventDefault();
-        dropzone.classList.remove('border-brand', 'bg-brand/5');
+        dragCounter--;
+        if (dragCounter <= 0) {
+            dragCounter = 0;
+            setDropzoneDragActive(false);
+        }
     });
 
     dropzone.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropzone.classList.remove('border-brand', 'bg-brand/5');
+        dragCounter = 0;
+        setDropzoneDragActive(false);
         const files = Array.from(e.dataTransfer.files);
         if (files.length > 0) {
             addFiles(files);
@@ -333,6 +515,7 @@
 
     function addFiles(files) {
         selectedFiles.push(...files);
+        files.forEach(() => fileStatuses.push('pending'));
         updateFilesList();
     }
 
@@ -343,8 +526,12 @@
             filesList.classList.add('hidden');
             fileCountDisplay.classList.add('hidden');
             filesList.innerHTML = '';
+            fileStatuses = [];
+            updateFormatOptions();
             return;
         }
+
+        updateFormatOptions();
 
         filesList.classList.remove('hidden');
         fileCountDisplay.classList.remove('hidden');
@@ -382,11 +569,20 @@
             removeBtn.onclick = (e) => {
                 e.stopPropagation();
                 selectedFiles.splice(index, 1);
+                fileStatuses.splice(index, 1);
                 updateFilesList();
             };
 
+            const status = fileStatuses[index] || 'pending';
+            const statusCfg = getStatusIconConfig(status);
+            const statusIcon = document.createElement('i');
+            statusIcon.setAttribute('data-lucide', statusCfg.icon);
+            statusIcon.className = statusCfg.classes;
+            statusIcon.setAttribute('data-file-index', String(index));
+
             fileItem.appendChild(fileInfo);
             fileItem.appendChild(fileSize);
+            fileItem.appendChild(statusIcon);
             fileItem.appendChild(removeBtn);
             filesList.appendChild(fileItem);
         });
@@ -404,7 +600,33 @@
 
     function clearFiles() {
         selectedFiles = [];
+        fileStatuses = [];
         updateFilesList();
+    }
+
+    function removeSuccessfulFiles() {
+        const keptFiles = [];
+        const keptStatuses = [];
+        selectedFiles.forEach((file, i) => {
+            if (fileStatuses[i] !== 'success') {
+                keptFiles.push(file);
+                keptStatuses.push(fileStatuses[i] === 'error' ? 'error' : 'pending');
+            }
+        });
+        selectedFiles = keptFiles;
+        fileStatuses = keptStatuses;
+        updateFilesList();
+    }
+
+    function setFileStatus(index, status) {
+        fileStatuses[index] = status;
+        const icon = filesList.querySelector(`[data-file-index="${index}"]`);
+        if (icon) {
+            const cfg = getStatusIconConfig(status);
+            icon.setAttribute('data-lucide', cfg.icon);
+            icon.className = cfg.classes;
+            lucide.createIcons();
+        }
     }
 
     // --- Конвертация ---
@@ -413,6 +635,8 @@
             alert(currentLang === 'ru' ? 'Пожалуйста, выберите файлы' : 'Please select files');
             return;
         }
+
+        if (getUploadCategory() === 'incompatible') return;
 
         const t = i18n[currentLang];
         const targetMime = targetFormat.value;
@@ -424,7 +648,9 @@
         conversionStatus.classList.remove('hidden');
         progressInner.style.width = '0%';
 
-        // Если файлов больше одного, создаем ZIP архив
+        fileStatuses = fileStatuses.map(s => (s === 'error' ? 'pending' : s));
+        updateFilesList();
+
         const createZip = totalFiles > 1;
         let zip = createZip ? new JSZip() : null;
 
@@ -434,6 +660,8 @@
             progressInner.style.width = progress + '%';
             conversionStatus.textContent = `${t.converting} ${i + 1} ${t.of} ${totalFiles}: ${file.name}`;
 
+            setFileStatus(i, 'converting');
+
             try {
                 const resultBlob = await convertFile(file, targetMime);
 
@@ -441,16 +669,16 @@
                     const fileName = generateFileName(file.name, targetMime);
                     zip.file(fileName, resultBlob);
                 } else {
-                    // Если один файл, сразу скачиваем
                     const fileName = generateFileName(file.name, targetMime);
                     downloadBlob(resultBlob, fileName);
                 }
 
+                setFileStatus(i, 'success');
                 processedFiles++;
             } catch (error) {
                 console.error(`Error converting ${file.name}:`, error);
+                setFileStatus(i, 'error');
                 hasErrors = true;
-                // Продолжаем с другими файлами
             }
         }
 
@@ -473,12 +701,13 @@
             conversionStatus.textContent = t.complete;
         }
 
-        // Сбрасываем состояние
         setTimeout(() => {
-            convertBtn.disabled = false;
+            updateFormatOptions();
             progressInner.style.width = '0%';
             conversionStatus.classList.add('hidden');
-            if (!hasErrors) {
+            if (hasErrors) {
+                removeSuccessfulFiles();
+            } else {
                 clearFiles();
             }
         }, 2000);
