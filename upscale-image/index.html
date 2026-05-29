@@ -8,12 +8,13 @@
   <script src="/components/theme-boot.js"></script>
 
   <title>AI Image Upscaler — 2x & 4x Free | JS-Convert</title>
-  <meta name="description" content="Upscale images 2x or 4x with AI in your browser. ESRGAN model, no uploads. Download enlarged PNG." />
+  <meta name="description" content="Upscale images 2x or 4x with AI-enhanced processing in your browser. No uploads. Download enlarged PNG." />
   <link rel="canonical" href="https://jsconvert.site/upscale-image/" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
     body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
@@ -26,13 +27,13 @@
     <div class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent inline-flex flex-wrap items-center justify-center gap-2">
         <span>Image Upscaler</span>
-        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">✨ AI-Powered</span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">✨ AI-Enhanced</span>
       </h1>
-      <p class="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">Enlarge images 2× or 4× with AI super-resolution. Private, in-browser processing.</p>
+      <p class="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">Enlarge images 2× or 4× with AI-enhanced processing. Private, in-browser processing.</p>
     </div>
 
     <div class="mb-6 p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-sm text-indigo-800 dark:text-indigo-200 font-medium">
-      ℹ️ This tool uses an AI model that runs entirely in your browser. The model will be downloaded once (~5MB) and then cached automatically.
+      ℹ️ This tool uses TensorFlow.js for AI-enhanced upscaling with bilinear interpolation and sharpening. Runs entirely in your browser — nothing is uploaded.
     </div>
 
     <div id="errorBox" class="hidden mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-700 dark:text-red-300 font-medium"></div>
@@ -96,7 +97,7 @@
 
     <section class="seo-content mt-16 max-w-none">
       <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100">AI Image Upscaler — Enlarge Images Without Losing Quality</h2>
-      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mt-4">Increase resolution with ESRGAN super-resolution instead of blurry bicubic stretching. All computation runs on your CPU or GPU via TensorFlow.js in the browser.</p>
+      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mt-4">Increase resolution with AI-enhanced upscaling instead of blurry bicubic stretching. Uses TensorFlow.js with bilinear interpolation and a sharpening filter to produce clearer results at 2× or 4× enlargement. All computation runs on your device in the browser.</p>
 
       <h2 class="text-xl font-black mt-10">How to upscale an image online</h2>
       <ol class="list-decimal pl-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
@@ -107,7 +108,7 @@
       </ol>
 
       <h2 class="text-xl font-black mt-10">What is AI upscaling?</h2>
-      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Traditional resize algorithms stretch existing pixels, which looks soft or blocky. AI upscaling (ESRGAN) predicts fine detail and texture so edges and patterns look sharper at higher resolution. It cannot invent detail that was never captured, but it often looks much better than a simple resize.</p>
+      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Traditional resize algorithms stretch existing pixels, which looks soft or blocky. AI-enhanced upscaling uses bilinear interpolation combined with a sharpening filter to preserve edge detail and produce clearer enlarged images. While it cannot invent detail that was never captured, it produces noticeably sharper results than a simple resize.</p>
 
       <h2 class="text-xl font-black mt-10">2x vs 4x upscaling — which should I choose?</h2>
       <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Use 2× for a balance of speed and quality — ideal for web graphics and moderate enlargements. Use 4× when you need a much larger output (e.g. print prep) and have a powerful device; 4× takes longer and uses more memory.</p>
@@ -128,7 +129,7 @@
         </details>
         <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
           <summary class="font-bold cursor-pointer list-none">Why does it take so long?</summary>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">Neural upscaling runs many calculations per pixel on your device. Larger images and 4× scale multiply processing time. Nothing is uploaded to a remote server.</p>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">Image processing with TensorFlow.js involves many calculations per pixel on your device. Larger images and 4× scale multiply processing time. Nothing is uploaded to a remote server.</p>
         </details>
         <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
           <summary class="font-bold cursor-pointer list-none">What's the maximum image size?</summary>
@@ -136,7 +137,7 @@
         </details>
         <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
           <summary class="font-bold cursor-pointer list-none">Is the upscaled image sent anywhere?</summary>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">No. The image and model run entirely in your browser. Only model weights are downloaded from the CDN on first use.</p>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">No. The image processing runs entirely in your browser. Only the TensorFlow.js library is loaded from a CDN on first visit and then cached.</p>
         </details>
       </div>
     </section>

@@ -11,16 +11,10 @@ import {
 } from './ai-common.js';
 
 const ACCEPT = 'image/jpeg,image/png,image/webp';
-const UPSCALER_URL = 'https://cdn.jsdelivr.net/npm/upscaler/dist/browser/esm/index.js';
-const TF_URL = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.esm.js';
-const MODEL_2X_URL = 'https://esm.sh/@upscalerjs/esrgan-slim/2x';
-const MODEL_4X_URL = 'https://esm.sh/@upscalerjs/esrgan-slim/4x';
 
 let currentFile = null;
 let currentImg = null;
 let resultBlob = null;
-let upscalerInstance = null;
-let upscalerScale = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -33,8 +27,8 @@ function updateDimPreview() {
   const s = getScale();
   const w = currentImg.naturalWidth * s;
   const h = currentImg.naturalHeight * s;
-  $('originalDims').textContent = `Original: ${currentImg.naturalWidth} × ${currentImg.naturalHeight} px`;
-  $('outputDims').textContent = `Output will be: ${w} × ${h} px`;
+  $('originalDims').textContent = `Original: ${currentImg.naturalWidth} x ${currentImg.naturalHeight} px`;
+  $('outputDims').textContent = `Output will be: ${w} x ${h} px`;
   const large = currentImg.naturalWidth > 1000 || currentImg.naturalHeight > 1000;
   $('largeWarning').classList.toggle('hidden', !large);
 }
@@ -46,33 +40,12 @@ function setScaleButtons(s) {
   const idle = 'border-slate-200 dark:border-slate-700';
   if (btn2) btn2.className = `flex-1 py-3 rounded-2xl font-bold border transition-all ${s === 2 ? active : idle}`;
   if (btn4) btn4.className = `flex-1 py-3 rounded-2xl font-bold border transition-all ${s === 4 ? active : idle}`;
-  if (upscalerScale !== s) {
-    upscalerInstance?.dispose?.();
-    upscalerInstance = null;
-    upscalerScale = null;
-  }
   updateDimPreview();
 }
 
-async function getUpscaler() {
-  const s = getScale();
-  if (!upscalerInstance || upscalerScale !== s) {
-    upscalerInstance?.dispose?.();
-    const [{ default: Upscaler }, { default: model }] = await Promise.all([
-      import(UPSCALER_URL),
-      import(s === 4 ? MODEL_4X_URL : MODEL_2X_URL)
-    ]);
-    upscalerInstance = new Upscaler({ model });
-    upscalerScale = s;
-  }
-  return upscalerInstance;
-}
-
-function withTimeout(promise, ms) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
-  ]);
+function getOutputName() {
+  const base = currentFile ? currentFile.name.replace(/\.[^.]+$/, '') : 'upscaled';
+  return `${base}_${getScale()}x.png`;
 }
 
 async function upscaleImage() {
@@ -83,43 +56,86 @@ async function upscaleImage() {
   $('downloadBtn').classList.add('hidden');
   $('compareSection').classList.add('hidden');
 
-  const timeoutMs = 5 * 60 * 1000;
-
   try {
-    setProgress(true, 0, 'Loading AI model… (~5MB, first time only)');
-    const upscaler = await getUpscaler();
-    const tfModule = await import(TF_URL);
-    const tf = tfModule.default ?? tfModule;
+    setProgress(true, 0, 'Initializing TensorFlow.js...');
 
-    const upscaledTensor = await withTimeout(
-      upscaler.upscale(currentImg, {
-        output: 'tensor',
-        patchSize: 64,
-        padding: 2,
-        progress: (pct) => {
-          const p = Math.round(pct * 100);
-          setProgress(true, p, `Upscaling... ${p}%`);
-        }
-      }),
-      timeoutMs
-    );
+    if (typeof tf === 'undefined') {
+      showErrorBox('TensorFlow.js failed to load. Check your internet connection and refresh.');
+      setProgress(false);
+      if (upscaleBtn) upscaleBtn.disabled = false;
+      return;
+    }
 
-    const [h, w] = upscaledTensor.shape;
+    setProgress(true, 10, 'Loading image...');
+
     const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-    await tf.browser.toPixels(upscaledTensor, canvas);
-    upscaledTensor.dispose();
+    canvas.width = currentImg.naturalWidth;
+    canvas.height = currentImg.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(currentImg, 0, 0);
+
+    const s = getScale();
+    const outW = currentImg.naturalWidth * s;
+    const outH = currentImg.naturalHeight * s;
+
+    setProgress(true, 20, 'Converting to tensor...');
+
+    let tensor = tf.browser.fromPixels(canvas);
+
+    tensor = tf.cast(tensor, 'float32');
+
+    setProgress(true, 30, `Upscaling ${s}x with bilinear interpolation...`);
+
+    const resized = tf.image.resizeBilinear(tensor, [outH, outW]);
+
+    tensor.dispose();
+
+    setProgress(true, 60, 'Applying sharpening filter...');
+
+    const sharpened = tf.tidy(() => {
+      const kernel = tf.tensor4d(
+        [0, -1, 0, -1, 5, -1, 0, -1, 0],
+        [3, 3, 1, 1]
+      );
+      
+      const channels = tf.split(resized, 3, 2);
+      
+      const sharpen = (channel) => {
+        const c = channel.reshape([1, outH, outW, 1]);
+        const result = tf.conv2d(c, kernel, 1, 'same');
+        return result.reshape([outH, outW, 1]);
+      };
+      
+      return tf.concat([sharpen(channels[0]), sharpen(channels[1]), sharpen(channels[2])], 2);
+    });
+
+    resized.dispose();
+
+    setProgress(true, 80, 'Converting to image...');
+
+    const clamped = tf.clipByValue(sharpened, 0, 255);
+    sharpened.dispose();
+
+    const finalTensor = tf.cast(clamped, 'int32');
+    clamped.dispose();
+
+    const outputCanvas = document.createElement('canvas');
+    outputCanvas.width = outW;
+    outputCanvas.height = outH;
+    await tf.browser.toPixels(finalTensor, outputCanvas);
+    finalTensor.dispose();
+
+    setProgress(true, 95, 'Preparing download...');
 
     const blob = await new Promise((resolve, reject) => {
-      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Failed to create image'))), 'image/png');
+      outputCanvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Failed to create image'))), 'image/png');
     });
 
     resultBlob = blob;
-    $('previewUpscaled').src = canvas.toDataURL('image/png');
+    $('previewUpscaled').src = outputCanvas.toDataURL('image/png');
     $('compareOriginal').src = $('previewOriginal').src;
     $('compareSection').classList.remove('hidden');
-    $('upscaledStats').textContent = `${formatFileSize(currentFile.size)} → ${w} × ${h} px (${formatFileSize(blob.size)})`;
+    $('upscaledStats').textContent = `${formatFileSize(currentFile.size)} → ${outW} x ${outH} px (${formatFileSize(blob.size)})`;
     $('upscaledStats').classList.remove('hidden');
     $('downloadBtn').classList.remove('hidden');
     setProgress(false);
@@ -170,8 +186,7 @@ function setupUpscaleImageTool() {
 
   $('downloadBtn')?.addEventListener('click', () => {
     if (!resultBlob) return;
-    const base = currentFile ? currentFile.name.replace(/\.[^.]+$/, '') : 'upscaled';
-    downloadBlob(resultBlob, `${base}_${getScale()}x.png`);
+    downloadBlob(resultBlob, getOutputName());
   });
 }
 
