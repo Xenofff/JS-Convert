@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIF to PNG Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert GIF images to PNG online for free. 100% private — files never leave your browser. No upload, no account needed." />
+  <link rel="canonical" href="https://jsconvert.com/gif-to-png/" />
+  <meta property="og:title" content="GIF to PNG Converter" />
+  <meta property="og:description" content="Free browser-based GIF to PNG conversion. Instant, private, no server." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    details.seo-faq summary::-webkit-details-marker { display: none; }
+    details.seo-faq summary::marker { content: ''; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">GIF to PNG Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert GIF images to PNG instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" multiple />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop GIF files here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Output</label>
+              <div class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold">PNG</div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert GIF to PNG</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Drop animated or static GIF files</li>
+          <li>Click Convert — the first frame is rendered to PNG</li>
+          <li>Download PNG or a ZIP for multiple GIFs</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert GIF to PNG?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          PNG gives you a high-quality still frame for thumbnails, social previews, documentation, or editors that don’t handle GIF well. It’s also useful when you only need one frame from an animation.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. GIFs are processed locally — nothing is uploaded.</p>
+        <h2 class="text-xl font-black pt-4">GIF vs PNG — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">GIF</th><th class="px-4 py-3 font-black">PNG</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Animation</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">No (still image)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Color depth</td><td class="px-4 py-3">256 colors/frame</td><td class="px-4 py-3">Millions of colors</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">1-bit alpha</td><td class="px-4 py-3">Full alpha</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Typical use</td><td class="px-4 py-3">Memes, short loops</td><td class="px-4 py-3">UI, screenshots</td></tr>
+              <tr><td class="px-4 py-3 font-bold">This tool exports</td><td class="px-4 py-3">First frame</td><td class="px-4 py-3">Lossless PNG</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will animation be preserved?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">No. PNG is a single image. Only the first frame of your GIF is exported.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I pick a different frame?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Not in this version — we export frame 1. Use a GIF editor to select another frame, then convert that file.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Why is my PNG larger than the GIF?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">PNG is lossless and may store more color data than a highly optimized GIF palette, especially for photographic frames.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initConverterPage } from '/components/converter-page.js';
+    import { gifToPng } from '/converters/gif.js';
+
+    initConverterPage({
+      pageTitle: 'GIF to PNG Converter',
+      subtitle: 'Convert GIF images to PNG instantly in your browser. Private by default — no files are uploaded.',
+      accept: 'image/gif,.gif',
+      outputMime: 'image/png',
+      outputExt: '.png',
+      perFileConvert: async (file) => gifToPng(file)
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVG to PNG Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert SVG files to PNG online for free. 100% private — files never leave your browser. No upload, no account needed." />
+  <link rel="canonical" href="https://jsconvert.com/svg-to-png/" />
+  <meta property="og:title" content="SVG to PNG Converter" />
+  <meta property="og:description" content="Free browser-based SVG to PNG conversion. Instant, private, no server." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    details.seo-faq summary::-webkit-details-marker { display: none; }
+    details.seo-faq summary::marker { content: ''; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">SVG to PNG Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert SVG files to PNG instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" multiple />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop SVG files here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Output</label>
+              <div class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold">PNG</div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert SVG to PNG</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Drop SVG vector files or icons</li>
+          <li>Click Convert — the SVG is rasterized in your browser</li>
+          <li>Download PNG (ZIP for multiple files)</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert SVG to PNG?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Some platforms (email clients, older CMS fields, certain mobile apps) block SVG for security reasons. PNG provides a portable raster snapshot that displays consistently everywhere.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Your SVG is read locally and never uploaded to a server.</p>
+        <h2 class="text-xl font-black pt-4">SVG vs PNG — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">SVG</th><th class="px-4 py-3 font-black">PNG</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Type</td><td class="px-4 py-3">Vector (XML)</td><td class="px-4 py-3">Raster (pixels)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Scalable</td><td class="px-4 py-3">Infinite*</td><td class="px-4 py-3">Fixed resolution</td></tr>
+              <tr><td class="px-4 py-3 font-bold">File size</td><td class="px-4 py-3">Tiny for icons</td><td class="px-4 py-3">Grows with dimensions</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Email / CMS support</td><td class="px-4 py-3">Often blocked</td><td class="px-4 py-3">Widely allowed</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">Logos &amp; UI</td><td class="px-4 py-3">Previews &amp; sharing</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">*PNG export uses the SVG’s intrinsic size or a sensible default canvas.</p>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What resolution will my PNG have?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">We rasterize at the SVG’s natural width/height when available, otherwise a default canvas (800×600) is used.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will text in SVG stay sharp?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Text renders as curves and should look crisp at the exported resolution. For tiny icons, export at 2× size if you need extra sharpness.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Are external fonts and images supported?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Self-contained SVGs work best. Files that rely on remote URLs may not render if those assets are blocked or offline.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initConverterPage } from '/components/converter-page.js';
+    import { svgToPng } from '/converters/svg.js';
+
+    initConverterPage({
+      pageTitle: 'SVG to PNG Converter',
+      subtitle: 'Convert SVG files to PNG instantly in your browser. Private by default — no files are uploaded.',
+      accept: 'image/svg+xml,.svg',
+      outputMime: 'image/png',
+      outputExt: '.png',
+      perFileConvert: async (file) => svgToPng(file)
+    });
+  </script>
+</body>
+</html>
+

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    <url>
-        <loc>https://jsconvert.com/</loc>
-        <lastmod>2026-05-29</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>1.0</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://jsconvert.com/?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="https://jsconvert.com/?lang=ru"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://jsconvert.com/"/>
-    </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://jsconvert.com/</loc></url>
+  <url><loc>https://jsconvert.com/compress/</loc></url>
+
+  <url><loc>https://jsconvert.com/webp-to-png/</loc></url>
+  <url><loc>https://jsconvert.com/webp-to-jpg/</loc></url>
+  <url><loc>https://jsconvert.com/png-to-jpg/</loc></url>
+  <url><loc>https://jsconvert.com/png-to-webp/</loc></url>
+  <url><loc>https://jsconvert.com/jpg-to-png/</loc></url>
+  <url><loc>https://jsconvert.com/jpg-to-webp/</loc></url>
+  <url><loc>https://jsconvert.com/gif-to-webp/</loc></url>
+  <url><loc>https://jsconvert.com/gif-to-png/</loc></url>
+  <url><loc>https://jsconvert.com/svg-to-png/</loc></url>
+  <url><loc>https://jsconvert.com/heic-to-jpg/</loc></url>
+  <url><loc>https://jsconvert.com/heic-to-png/</loc></url>
+
+  <url><loc>https://jsconvert.com/jpg-to-pdf/</loc></url>
+  <url><loc>https://jsconvert.com/png-to-pdf/</loc></url>
+
+  <url><loc>https://jsconvert.com/json-to-csv/</loc></url>
+  <url><loc>https://jsconvert.com/csv-to-json/</loc></url>
 </urlset>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JPG to WebP Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert JPG images to WebP online for free. 100% private — files never leave your browser. No upload, no account needed." />
+  <link rel="canonical" href="https://jsconvert.com/jpg-to-webp/" />
+  <meta property="og:title" content="JPG to WebP Converter" />
+  <meta property="og:description" content="Free browser-based JPG to WebP conversion. Instant, private, no server." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    details.seo-faq summary::-webkit-details-marker { display: none; }
+    details.seo-faq summary::marker { content: ''; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">JPG to WebP Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert JPG images to WebP instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" multiple />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop JPG files here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Output</label>
+              <div class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold">WEBP</div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert JPG to WebP</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Upload JPG/JPEG images via drag &amp; drop</li>
+          <li>Click Convert to create WebP in your browser</li>
+          <li>Download WebP or a ZIP when converting multiple files</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert JPG to WebP?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          WebP often beats JPG on bytes-per-quality for web delivery. Switching hero images and galleries to WebP can reduce LCP time and bandwidth without a visible quality drop at sensible settings.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Photos are processed on-device only — ideal for personal or client work.</p>
+        <h2 class="text-xl font-black pt-4">JPG vs WebP — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">JPG</th><th class="px-4 py-3 font-black">WebP</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Typical web size</td><td class="px-4 py-3">Baseline</td><td class="px-4 py-3">Often 25–35% smaller</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Yes</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Legacy support</td><td class="px-4 py-3">Excellent</td><td class="px-4 py-3">Modern browsers</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Animation</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Yes (animated WebP)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">Email &amp; old CMS</td><td class="px-4 py-3">Performance-focused sites</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will converting JPG to WebP reduce quality?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">WebP is lossy at default settings. You may see minor differences versus the source JPG, but visual quality is usually excellent at ~90% quality.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Should I replace all JPGs on my site with WebP?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Many sites use WebP with JPG fallbacks via &lt;picture&gt;. For internal tools or modern stacks, WebP alone is often enough.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Is there a file size limit?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">There’s no server cap because nothing is uploaded — limits depend only on your device RAM and browser.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initConverterPage } from '/components/converter-page.js';
+    import { pngToWebp } from '/converters/image.js';
+
+    initConverterPage({
+      pageTitle: 'JPG to WebP Converter',
+      subtitle: 'Convert JPG images to WebP instantly in your browser. Private by default — no files are uploaded.',
+      accept: 'image/jpeg,.jpg,.jpeg',
+      outputMime: 'image/webp',
+      outputExt: '.webp',
+      perFileConvert: async (file) => pngToWebp(file, 0.92)
+    });
+  </script>
+</body>
+</html>
+

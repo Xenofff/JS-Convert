@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HEIC to PNG Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert HEIC photos to PNG online for free. 100% private — files never leave your browser. No upload, no account needed." />
+  <link rel="canonical" href="https://jsconvert.com/heic-to-png/" />
+  <meta property="og:title" content="HEIC to PNG Converter" />
+  <meta property="og:description" content="Free browser-based HEIC to PNG conversion. Instant, private, no server." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    details.seo-faq summary::-webkit-details-marker { display: none; }
+    details.seo-faq summary::marker { content: ''; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">HEIC to PNG Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert HEIC photos to PNG instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" multiple />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop HEIC files here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Output</label>
+              <div class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold">PNG</div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert HEIC to PNG</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Add HEIC/HEIF photos from your device</li>
+          <li>Click Convert — decoded locally, then exported as PNG</li>
+          <li>Download PNG files or a ZIP for multiple images</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert HEIC to PNG?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          PNG is lossless and widely supported in design tools, documentation, and web CMS fields that reject HEIC. It’s a dependable format when you need pixel-stable exports from iPhone photos.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Personal photos never leave your browser.</p>
+        <h2 class="text-xl font-black pt-4">HEIC vs PNG — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">HEIC</th><th class="px-4 py-3 font-black">PNG</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Compression</td><td class="px-4 py-3">Efficient (Apple)</td><td class="px-4 py-3">Lossless</td></tr>
+              <tr><td class="px-4 py-3 font-bold">File size</td><td class="px-4 py-3">Smaller on device</td><td class="px-4 py-3">Often larger</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Editor support</td><td class="px-4 py-3">Spotty on Windows</td><td class="px-4 py-3">Excellent</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">Supported</td><td class="px-4 py-3">Supported</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">iPhone storage</td><td class="px-4 py-3">Design &amp; publishing</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Is PNG larger than HEIC?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Usually yes. PNG prioritizes lossless quality over storage efficiency compared to HEIC’s modern compression.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">HEIC vs HEIF — what’s the difference?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">HEIF is the container format; HEIC is Apple’s implementation. This tool accepts both extensions commonly used on iOS.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I convert Live Photos?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Live Photo bundles may not decode as expected. Export a still image from Photos first for best results.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initConverterPage } from '/components/converter-page.js';
+    import { heicToImageBlob } from '/converters/heic.js';
+
+    initConverterPage({
+      pageTitle: 'HEIC to PNG Converter',
+      subtitle: 'Convert HEIC photos to PNG instantly in your browser. Private by default — no files are uploaded.',
+      accept: '.heic,image/heic,image/heif',
+      outputMime: 'image/png',
+      outputExt: '.png',
+      perFileConvert: async (file) => heicToImageBlob(file, 'image/png', 1)
+    });
+  </script>
+</body>
+</html>
+
