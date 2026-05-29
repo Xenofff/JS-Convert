@@ -1,5 +1,9 @@
 import { TOOLS } from './tools.js';
 
+const GITHUB_SVG = `<svg viewBox="0 0 24 24" class="w-5 h-5 fill-current text-slate-700 dark:text-slate-200" aria-hidden="true">
+  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+</svg>`;
+
 function el(tag, className, html) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -19,11 +23,11 @@ function toolLink(tool, extraClass = '') {
 function dropdown(label, itemsHtml) {
   return `
     <div class="relative group">
-      <button class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
+      <button type="button" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
         <span class="text-slate-700 dark:text-slate-100">${label}</span>
         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-hover:text-brand transition-colors"></i>
       </button>
-      <div class="absolute left-0 top-full pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+      <div class="absolute left-0 top-full pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
         <div class="min-w-[260px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none p-2">
           ${itemsHtml}
         </div>
@@ -32,12 +36,34 @@ function dropdown(label, itemsHtml) {
   `;
 }
 
+export function initTheme() {
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = stored === 'dark' || (stored !== 'light' && prefersDark);
+  document.documentElement.classList.toggle('dark', isDark);
+  return isDark;
+}
+
+function bindThemeToggle() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn || btn.dataset.bound === 'true') return;
+  btn.dataset.bound = 'true';
+
+  btn.addEventListener('click', () => {
+    const isDark = !document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    window.lucide?.createIcons?.();
+  });
+}
+
 export function initLayout(options = {}) {
   const {
-    activeCategory = '',
     pageTitle = '',
     showNav = true
   } = options;
+
+  initTheme();
 
   const header = el(
     'header',
@@ -49,16 +75,16 @@ export function initLayout(options = {}) {
   const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
 
   header.innerHTML = `
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-2 flex-shrink-0">
         <div class="w-9 h-9 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
           <i data-lucide="refresh-cw" class="w-5 h-5"></i>
         </div>
-        <span class="text-xl font-bold tracking-tight">JS-Convert</span>
+        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">JS-Convert</span>
       </a>
 
       ${showNav ? `
-      <nav class="hidden md:flex items-center gap-3">
+      <nav class="hidden md:flex items-center gap-3 flex-1 justify-center">
         ${dropdown('Images', imagesMenu)}
         ${dropdown('Documents', docsMenu)}
         ${dropdown('Data', dataMenu)}
@@ -69,9 +95,15 @@ export function initLayout(options = {}) {
       </nav>
       ` : ''}
 
-      <a href="https://github.com/Xenofff/JS-Convert" target="_blank" class="h-10 w-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all shadow-sm flex items-center justify-center">
-        <i data-lucide="github" class="w-5 h-5 text-slate-700 dark:text-slate-200"></i>
-      </a>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button id="themeToggle" type="button" aria-label="Toggle dark mode" class="h-10 w-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all shadow-sm flex items-center justify-center">
+          <i data-lucide="sun" class="w-5 h-5 text-orange-500 block dark:hidden"></i>
+          <i data-lucide="moon" class="w-5 h-5 text-blue-400 hidden dark:block"></i>
+        </button>
+        <a href="https://github.com/Xenofff/JS-Convert" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" class="h-10 w-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all shadow-sm flex items-center justify-center">
+          ${GITHUB_SVG}
+        </a>
+      </div>
     </div>
   `;
 
@@ -104,7 +136,11 @@ export function initLayout(options = {}) {
 
       <div class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">© 2026 JS-Convert • Local & Secure</p>
-        <a href="/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">${pageTitle ? pageTitle : 'Home'}</a>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="/privacy/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">Privacy Policy</a>
+          <a href="/terms/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">Terms of Service</a>
+          <a href="/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">${pageTitle ? pageTitle : 'Home'}</a>
+        </div>
       </div>
     </div>
   `;
@@ -117,7 +153,6 @@ export function initLayout(options = {}) {
   }
   document.body.appendChild(footer);
 
-  // Tailwind helper styles for the existing "glass" header design
   if (!document.getElementById('layoutStyles')) {
     const style = el('style');
     style.id = 'layoutStyles';
@@ -128,8 +163,9 @@ export function initLayout(options = {}) {
     document.head.appendChild(style);
   }
 
+  bindThemeToggle();
+
   if (window.lucide && typeof window.lucide.createIcons === 'function') {
     window.lucide.createIcons();
   }
 }
-

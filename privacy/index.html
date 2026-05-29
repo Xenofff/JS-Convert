@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.png">
+  <script src="/components/theme-boot.js"></script>
+  <title>Privacy Policy — JS-Convert</title>
+  <meta name="description" content="JS-Convert Privacy Policy. No data collection, no cookies, no server uploads. Files stay on your device." />
+  <link rel="canonical" href="https://jsconvert.site/privacy/" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    .dark .glass { background: rgba(17, 24, 39, 0.8); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14 w-full">
+    <h1 class="text-3xl md:text-4xl font-black mb-2">Privacy Policy</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium mb-10">Last updated: May 29, 2026</p>
+
+    <div class="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">Summary</h2>
+        <p>JS-Convert is a free, client-side file conversion tool. We do not collect personal data, do not require accounts, and do not upload your files to our servers.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">No data collection</h2>
+        <p>We do not collect names, email addresses, payment information, or the contents of files you convert. Conversion happens entirely in your web browser using JavaScript on your device.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">Files never leave your device</h2>
+        <p>When you use JS-Convert, files you select are processed locally in your browser’s memory. They are not transmitted to JS-Convert or third-party servers for conversion. Downloaded results are created on your device.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">No cookies</h2>
+        <p>We do not set tracking or advertising cookies. The site may store your theme preference (light/dark) in your browser’s <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">localStorage</code> only — this stays on your device and is not sent to us.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">No analytics (currently)</h2>
+        <p>We do not use third-party analytics or advertising scripts at this time. If that changes, this policy will be updated.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">Third-party resources</h2>
+        <p>The site loads open-source libraries from public CDNs (for example Tailwind CSS and Lucide icons) to render the interface. Those providers may log standard connection data (such as IP address) according to their own policies when your browser requests those files.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">Children</h2>
+        <p>JS-Convert is not directed at children under 13. We do not knowingly collect information from anyone.</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-3">Contact</h2>
+        <p>Questions about this policy can be raised via the <a href="https://github.com/Xenofff/JS-Convert" class="text-brand hover:underline font-bold" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Privacy Policy', showNav: true });
+  </script>
+</body>
+</html>
