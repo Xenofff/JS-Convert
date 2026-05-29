@@ -6,7 +6,6 @@
 
 **No servers. No uploads. Everything runs in your browser.**
 
-[![HitCount](https://hits.dwyl.com/Xenofff/https://githubcom/Xenofff/JS-Convert.svg?style=flat-square)](http://hits.dwyl.com/Xenofff/https://githubcom/Xenofff/JS-Convert)
 
 </div>
 
