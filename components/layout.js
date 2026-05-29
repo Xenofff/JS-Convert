@@ -73,6 +73,7 @@ export function initLayout(options = {}) {
   const imagesMenu = TOOLS.images.map(t => toolLink(t)).join('');
   const docsMenu = TOOLS.documents.map(t => toolLink(t)).join('');
   const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
+  const aiMenu = (TOOLS.ai || []).map(t => toolLink(t)).join('');
 
   header.innerHTML = `
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
@@ -88,6 +89,7 @@ export function initLayout(options = {}) {
         ${dropdown('Images', imagesMenu)}
         ${dropdown('Documents', docsMenu)}
         ${dropdown('Data', dataMenu)}
+        ${dropdown('AI Tools', aiMenu)}
         <a href="/compress/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
           <i data-lucide="minimize-2" class="w-4 h-4 text-brand"></i>
           <span class="text-slate-700 dark:text-slate-100">Compress</span>
@@ -130,6 +132,7 @@ export function initLayout(options = {}) {
             ${TOOLS.documents.map(t => toolLink(t)).join('')}
             ${TOOLS.data.map(t => toolLink(t)).join('')}
             ${TOOLS.compress.map(t => toolLink(t)).join('')}
+            ${(TOOLS.ai || []).map(t => toolLink(t)).join('')}
           </div>
         </div>
       </div>

@@ -72,6 +72,10 @@
           <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">🗂️ Data</h3>
           <div id="toolsData" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
+        <div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">🤖 AI Tools</h3>
+          <div id="toolsAi" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
       </div>
     </section>
 
@@ -131,7 +135,8 @@
         images: document.getElementById('toolsImages'),
         documents: document.getElementById('toolsDocs'),
         compress: document.getElementById('toolsCompress'),
-        data: document.getElementById('toolsData')
+        data: document.getElementById('toolsData'),
+        ai: document.getElementById('toolsAi')
       };
 
       for (const [key, el] of Object.entries(grids)) {

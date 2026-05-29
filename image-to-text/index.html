@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.png">
+  <script src="/components/theme-boot.js"></script>
+
+  <title>Image to Text (OCR) — Free & Private | JS-Convert</title>
+  <meta name="description" content="Extract text from images with OCR in your browser. Multiple languages, copy or download as TXT. No uploads." />
+  <link rel="canonical" href="https://jsconvert.site/image-to-text/" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    details.seo-faq summary::-webkit-details-marker { display: none; }
+    details.seo-faq summary::marker { content: ''; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-5xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent inline-flex flex-wrap items-center justify-center gap-2">
+        <span>Image to Text (OCR)</span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">✨ AI-Powered</span>
+      </h1>
+      <p class="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">Extract printed text from screenshots and photos. Runs locally with Tesseract.js.</p>
+    </div>
+
+    <div class="mb-6 p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-sm text-indigo-800 dark:text-indigo-200 font-medium">
+      ℹ️ This tool uses an AI model that runs entirely in your browser. Language data is downloaded once (~2MB for English, more for other languages) and then cached automatically.
+    </div>
+
+    <div id="errorBox" class="hidden mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-700 dark:text-red-300 font-medium"></div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden p-8 md:p-12 space-y-8">
+      <div id="thumbWrap" class="hidden flex justify-center">
+        <img id="thumbPreview" alt="Uploaded preview" class="max-h-32 rounded-2xl border border-slate-200 dark:border-slate-700 object-contain" />
+      </div>
+
+      <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[200px]">
+        <input type="file" id="fileInput" class="hidden" />
+        <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand transition-all mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        </div>
+        <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop an image or click to browse</p>
+        <p class="mt-2 text-xs text-slate-400 font-bold">JPG, PNG, WEBP, GIF, BMP</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mb-2">Language</label>
+          <select id="langSelect" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 ring-brand/50 font-bold cursor-pointer">
+            <option value="eng" selected>English (eng)</option>
+            <option value="rus">Russian (rus)</option>
+            <option value="deu">German (deu)</option>
+            <option value="fra">French (fra)</option>
+            <option value="spa">Spanish (spa)</option>
+            <option value="chi_sim">Chinese Simplified (chi_sim)</option>
+            <option value="ara">Arabic (ara)</option>
+            <option value="jpn">Japanese (jpn)</option>
+            <option value="auto">Auto-detect (eng+rus)</option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button id="extractBtn" disabled class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl shadow-xl shadow-brand/25 transition-all flex items-center justify-center gap-3">
+            <span>Extract Text</span>
+            <i data-lucide="scan-text" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="progressWrap" class="hidden">
+        <p id="progressLabel" class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Loading…</p>
+        <div class="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div id="resultSection" class="hidden space-y-4">
+        <p id="confidence" class="text-sm font-black text-brand">Accuracy: —</p>
+        <textarea id="resultText" readonly rows="12" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 font-mono text-sm outline-none focus:ring-2 ring-brand/50 resize-y"></textarea>
+        <p id="charCount" class="text-xs font-bold text-slate-500">Extracted 0 characters</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <button id="copyBtn" type="button" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand font-bold py-4 rounded-2xl transition-all">Copy to Clipboard</button>
+          <button id="downloadTxtBtn" type="button" class="bg-brand hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2">
+            <span>Download as .txt</span>
+            <i data-lucide="download" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-16 max-w-none">
+      <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100">Image to Text Converter (OCR) — Free & Private</h2>
+      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mt-4">Turn screenshots, scans, and photos into editable text without cloud OCR services. Everything runs in your browser using Tesseract.js and Web Workers.</p>
+
+      <h2 class="text-xl font-black mt-10">How to extract text from an image</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+        <li>Upload your image.</li>
+        <li>Choose the document language (or auto-detect for English + Russian).</li>
+        <li>Click <strong>Extract Text</strong> and wait for recognition to finish.</li>
+        <li>Copy the result or download it as a plain .txt file.</li>
+      </ol>
+
+      <h2 class="text-xl font-black mt-10">What is OCR and how does it work?</h2>
+      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">OCR (Optical Character Recognition) detects letters and words in pixel data. Tesseract analyzes shapes, lines, and language models to reconstruct text. Because processing happens locally, your document never leaves your device.</p>
+
+      <h2 class="text-xl font-black mt-10">Supported languages</h2>
+      <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">English, Russian, German, French, Spanish, Chinese (Simplified), Arabic, Japanese, plus an auto-detect mode that tries English and Russian. Additional language packs download on first use for that language.</p>
+
+      <h2 class="text-xl font-black mt-10">Tips for best OCR accuracy</h2>
+      <ul class="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+        <li>Use good, even lighting and avoid heavy shadows.</li>
+        <li>Prefer clear, printed fonts over decorative or tiny text.</li>
+        <li>Higher resolution helps — crop to the text region when possible.</li>
+        <li>Keep the image straight; skewed pages reduce accuracy.</li>
+      </ul>
+
+      <h2 class="text-xl font-black mt-10">FAQ</h2>
+      <div class="space-y-3 mt-4">
+        <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <summary class="font-bold cursor-pointer list-none">Can it read handwriting?</summary>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">Support is limited. It works best with printed or typed text. Neat handwriting may work partially; cursive and messy notes often produce errors.</p>
+        </details>
+        <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <summary class="font-bold cursor-pointer list-none">What image formats are supported?</summary>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">JPG, PNG, WEBP, GIF, and BMP.</p>
+        </details>
+        <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <summary class="font-bold cursor-pointer list-none">Is there a file size limit?</summary>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">There is no fixed limit, but very large images use more memory and take longer. For huge scans, resize the image first for faster results.</p>
+        </details>
+        <details class="seo-faq bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <summary class="font-bold cursor-pointer list-none">How accurate is the text recognition?</summary>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 font-medium">Accuracy depends on image quality, font, and language. The tool shows a confidence score after extraction. Clean screenshots of text often reach 90%+ on English.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    import { initImageToTextTool } from '/components/image-to-text-tool.js';
+    initLayout({ pageTitle: 'Image to Text' });
+    initImageToTextTool();
+    window.lucide?.createIcons?.();
+  </script>
+</body>
+</html>

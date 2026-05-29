@@ -24,6 +24,11 @@ export const TOOLS = {
   ],
   compress: [
     { href: '/compress/', title: 'Compress Images', icon: 'minimize-2', key: 'compress' }
+  ],
+  ai: [
+    { href: '/remove-background/', title: 'Remove Background', icon: 'scissors', key: 'remove-background' },
+    { href: '/image-to-text/', title: 'Image to Text (OCR)', icon: 'scan-text', key: 'image-to-text' },
+    { href: '/upscale-image/', title: 'Upscale Image 2x/4x', icon: 'zoom-in', key: 'upscale-image' }
   ]
 };
 
@@ -31,5 +36,6 @@ export const ALL_TOOLS = [
   ...TOOLS.images,
   ...TOOLS.documents,
   ...TOOLS.compress,
-  ...TOOLS.data
+  ...TOOLS.data,
+  ...TOOLS.ai
 ];
