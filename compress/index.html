@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="shortcut icon" href="/favicon.png">
-  <script src="/components/theme-boot.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <title>Image Compressor — Reduce File Size Online Free | JS-Convert</title>
   <meta name="description" content="Compress images in your browser. Adjust quality, change format, batch compress and download ZIP. 100% private — no uploads." />
@@ -13,13 +13,15 @@
   <meta property="og:title" content="Image Compressor — JS-Convert" />
   <meta property="og:description" content="Compress images locally in your browser. Batch support + ZIP download. Private by design." />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
@@ -117,6 +119,7 @@
     </section>
   </main>
 
+  <script defer src="https://unpkg.com/lucide@latest"></script>
   <script type="module">
     import { initLayout } from '/components/layout.js';
     initLayout({ pageTitle: 'Image Compressor' });

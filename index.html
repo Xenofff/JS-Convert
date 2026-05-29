@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="shortcut icon" href="/favicon.png">
-  <script src="/components/theme-boot.js"></script>
 
   <title>Free Online File Converter — Private & Instant | JS-Convert</title>
   <meta name="description" content="Convert images, documents, and data files directly in your browser. No uploads. No accounts. 100% private." />
@@ -13,17 +11,21 @@
   <meta property="og:title" content="JS-Convert — Private File Converter" />
   <meta property="og:description" content="Free browser-based converters and tools. Instant, private, no server uploads." />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <link rel="stylesheet" href="/style.css" />
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
-    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-    .dark .glass { background: rgba(17, 24, 39, 0.8); }
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
   </style>
+
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"JS-Convert","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","description":"Convert images, documents, and data files directly in your browser. No uploads. No accounts. 100% private.","url":"https://jsconvert.site","offers":{"@type":"Offer","price":"0.00","priceCurrency":"USD"}}</script>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
@@ -58,24 +60,24 @@
 
       <div class="space-y-8">
         <div>
-          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">🖼️ Image Converters</h3>
-          <div id="toolsImages" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">Image Converters</h3>
+          <div id="toolsImages" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[220px]"></div>
         </div>
         <div>
-          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">📄 Documents</h3>
-          <div id="toolsDocs" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">Documents</h3>
+          <div id="toolsDocs" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[80px]"></div>
         </div>
         <div>
-          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">📦 Compress</h3>
-          <div id="toolsCompress" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">Compress</h3>
+          <div id="toolsCompress" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[80px]"></div>
         </div>
         <div>
-          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">🗂️ Data</h3>
-          <div id="toolsData" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">Data</h3>
+          <div id="toolsData" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[80px]"></div>
         </div>
         <div>
-          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">🤖 AI Tools</h3>
-          <div id="toolsAi" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4">AI Tools</h3>
+          <div id="toolsAi" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[80px]"></div>
         </div>
       </div>
     </section>
@@ -110,6 +112,7 @@
     </section>
   </main>
 
+  <script defer src="https://unpkg.com/lucide@latest"></script>
   <script type="module">
     import { initLayout } from './components/layout.js';
     import { TOOLS } from './components/tools.js';
@@ -141,25 +144,20 @@
       };
 
       for (const [key, el] of Object.entries(grids)) {
-        if (!el) {
-          console.error(`Missing grid element for tools.${key}`);
-          continue;
-        }
+        if (!el) continue;
         const items = TOOLS[key];
-        if (!Array.isArray(items)) {
-          console.error(`TOOLS.${key} is not an array`);
-          continue;
-        }
+        if (!Array.isArray(items)) continue;
         el.innerHTML = items.map(card).join('');
       }
     }
 
     renderToolsGrid();
-    initLayout({ pageTitle: 'Home' });
-    // Must run after tool cards + layout header/footer are in the DOM
-    if (window.lucide?.createIcons) {
-      window.lucide.createIcons();
-    }
+
+    if (window.lucide?.createIcons) window.lucide.createIcons();
+
+    requestIdleCallback(() => {
+      initLayout({ pageTitle: 'Home' });
+    }, { timeout: 2000 });
   </script>
 </body>
 </html>

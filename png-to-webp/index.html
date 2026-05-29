@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="shortcut icon" href="/favicon.png">
-  <script src="/components/theme-boot.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <title>PNG to WebP Converter — Free, Private, No Upload | JS-Convert</title>
   <meta name="description" content="Convert PNG images to WebP online for free. 100% private — files never leave your browser. No upload, no account needed." />
@@ -13,15 +13,17 @@
   <meta property="og:title" content="PNG to WebP Converter" />
   <meta property="og:description" content="Free browser-based PNG to WebP conversion. Instant, private, no server." />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: '#4f46e5' } } } };</script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-    body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
-    details.seo-faq summary::-webkit-details-marker { display: none; }
-    details.seo-faq summary::marker { content: ''; }
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
@@ -108,6 +110,7 @@
     </section>
   </main>
 
+  <script defer src="https://unpkg.com/lucide@latest"></script>
   <script type="module">
     import { initConverterPage } from '/components/converter-page.js';
     import { pngToWebp } from '/converters/image.js';

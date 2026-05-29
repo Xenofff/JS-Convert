@@ -65,17 +65,12 @@ export function initLayout(options = {}) {
 
   initTheme();
 
-  const header = el(
-    'header',
-    'sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800'
-  );
-
   const imagesMenu = TOOLS.images.map(t => toolLink(t)).join('');
   const docsMenu = TOOLS.documents.map(t => toolLink(t)).join('');
   const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
   const aiMenu = (TOOLS.ai || []).map(t => toolLink(t)).join('');
 
-  header.innerHTML = `
+  const headerHtml = `
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-2 flex-shrink-0">
         <div class="w-9 h-9 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
@@ -109,8 +104,7 @@ export function initLayout(options = {}) {
     </div>
   `;
 
-  const footer = el('footer', 'mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-12');
-  footer.innerHTML = `
+  const footerHtml = `
     <div class="max-w-5xl mx-auto px-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
         <div class="space-y-4">
@@ -138,37 +132,41 @@ export function initLayout(options = {}) {
       </div>
 
       <div class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">© 2026 JS-Convert • Local & Secure</p>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">&copy; 2026 JS-Convert &bull; Local &amp; Secure</p>
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a href="/privacy/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">Privacy Policy</a>
           <a href="/terms/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">Terms of Service</a>
-          <a href="/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">${pageTitle ? pageTitle : 'Home'}</a>
+          <a href="/" class="text-xs font-bold text-slate-400 hover:text-brand transition-colors uppercase tracking-widest">${pageTitle || 'Home'}</a>
         </div>
       </div>
     </div>
   `;
 
-  const main = document.querySelector('main');
-  if (main) {
-    document.body.insertBefore(header, main);
+  function inject() {
+    const header = el('header', 'sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800');
+    header.innerHTML = headerHtml;
+
+    const footer = el('footer', 'mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-12');
+    footer.innerHTML = footerHtml;
+
+    const main = document.querySelector('main');
+    if (main) {
+      document.body.insertBefore(header, main);
+    } else {
+      document.body.prepend(header);
+    }
+    document.body.appendChild(footer);
+
+    bindThemeToggle();
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
+  }
+
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(inject, { timeout: 1500 });
   } else {
-    document.body.prepend(header);
-  }
-  document.body.appendChild(footer);
-
-  if (!document.getElementById('layoutStyles')) {
-    const style = el('style');
-    style.id = 'layoutStyles';
-    style.textContent = `
-      .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-      .dark .glass { background: rgba(17, 24, 39, 0.8); }
-    `;
-    document.head.appendChild(style);
-  }
-
-  bindThemeToggle();
-
-  if (window.lucide && typeof window.lucide.createIcons === 'function') {
-    window.lucide.createIcons();
+    setTimeout(inject, 0);
   }
 }
