@@ -1,4 +1,4 @@
-export const SITE_DOMAIN = 'https://jsconvert.com';
+export const SITE_DOMAIN = 'https://jsconvert.site';
 
 export const TOOLS = {
   images: [
