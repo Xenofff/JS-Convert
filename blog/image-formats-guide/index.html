@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>Complete Guide to Image Formats: JPG, PNG, WebP, HEIC | JS-Convert</title>
+  <meta name="description" content="Understand the differences between popular image formats — JPG, PNG, WebP, HEIC — and choose the right one for your needs." />
+  <link rel="canonical" href="https://jsconvert.site/blog/image-formats-guide/" />
+  <meta property="og:title" content="Complete Guide to Image Formats: JPG, PNG, WebP, HEIC" />
+  <meta property="og:description" content="Everything you need to know about image formats — quality, size, support, and use cases." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">File Formats</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">Complete Guide to Image Formats: JPG, PNG, WebP, HEIC</h1>
+        <p class="text-slate-500">Published: April 1, 2025 · 7 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>
+          With so many image formats available, choosing the right one can feel overwhelming. Each format has its strengths and weaknesses, and the best choice depends on your specific use case. This guide covers the four most common formats you'll encounter.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">JPG (JPEG)</h2>
+        <p>
+          JPG has been the standard for digital photography since the 1990s. It uses lossy compression, which means some image data is permanently removed to reduce file size. This makes JPG ideal for photographs where perfect pixel accuracy isn't critical.
+        </p>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Best for:</strong> Photos, social media, web images</li>
+          <li><strong>Pros:</strong> Small file size, universal support, adjustable quality</li>
+          <li><strong>Cons:</strong> No transparency, artifacts on repeated saves</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">PNG</h2>
+        <p>
+          PNG uses lossless compression, preserving every pixel of the original image. It supports alpha transparency, making it the go-to format for logos, icons, and graphics that need to overlay other content.
+        </p>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Best for:</strong> Logos, icons, screenshots, graphics with text</li>
+          <li><strong>Pros:</strong> Lossless quality, transparency, wide support</li>
+          <li><strong>Cons:</strong> Larger file sizes, no animation</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">WebP</h2>
+        <p>
+          Developed by Google, WebP offers both lossy and lossless compression. It typically produces files 25-35% smaller than JPG at comparable quality. With 97%+ browser support, it's becoming the preferred format for web images.
+        </p>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Best for:</strong> Websites, web apps, performance-critical applications</li>
+          <li><strong>Pros:</strong> Smaller files, supports transparency and animation</li>
+          <li><strong>Cons:</strong> Not all legacy software supports it</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">HEIC</h2>
+        <p>
+          HEIC is Apple's preferred format for photos on iOS devices. It uses the HEIF standard and modern compression to store high-quality images at roughly half the size of JPG. However, it's not universally supported outside the Apple ecosystem.
+        </p>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Best for:</strong> iPhone/iPad photography, saving storage on Apple devices</li>
+          <li><strong>Pros:</strong> Excellent compression, supports burst photos and Live Photos</li>
+          <li><strong>Cons:</strong> Limited support on Windows, Android, and web</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">Comparison Table</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Format</th><th class="px-4 py-3 font-black">Type</th><th class="px-4 py-3 font-black">Transparency</th><th class="px-4 py-3 font-black">Best For</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">JPG</td><td class="px-4 py-3">Lossy</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Photos</td></tr>
+              <tr><td class="px-4 py-3 font-bold">PNG</td><td class="px-4 py-3">Lossless</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Graphics</td></tr>
+              <tr><td class="px-4 py-3 font-bold">WebP</td><td class="px-4 py-3">Both</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Web</td></tr>
+              <tr><td class="px-4 py-3 font-bold">HEIC</td><td class="px-4 py-3">Lossy</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Apple photos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">When to convert between formats</h2>
+        <p>
+          You might need to convert images when sharing across platforms, optimizing for web performance, or preparing files for print. Browser-based converters like JS-Convert make it easy to switch between formats without installing software.
+        </p>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/compress/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Compress Images <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

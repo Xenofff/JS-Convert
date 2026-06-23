@@ -67,6 +67,7 @@ export function initLayout(options = {}) {
 
   const imagesMenu = TOOLS.images.map(t => toolLink(t)).join('');
   const docsMenu = TOOLS.documents.map(t => toolLink(t)).join('');
+  const pdfMenu = (TOOLS.pdf || []).map(t => toolLink(t)).join('');
   const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
   const aiMenu = (TOOLS.ai || []).map(t => toolLink(t)).join('');
 
@@ -83,11 +84,16 @@ export function initLayout(options = {}) {
       <nav class="hidden md:flex items-center gap-3 flex-1 justify-center">
         ${dropdown('Images', imagesMenu)}
         ${dropdown('Documents', docsMenu)}
+        ${dropdown('PDF Tools', pdfMenu)}
         ${dropdown('Data', dataMenu)}
         ${dropdown('AI Tools', aiMenu)}
         <a href="/compress/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
           <i data-lucide="minimize-2" class="w-4 h-4 text-brand"></i>
           <span class="text-slate-700 dark:text-slate-100">Compress</span>
+        </a>
+        <a href="/blog/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
+          <i data-lucide="book-open" class="w-4 h-4 text-brand"></i>
+          <span class="text-slate-700 dark:text-slate-100">Blog</span>
         </a>
       </nav>
       ` : ''}
@@ -124,8 +130,10 @@ export function initLayout(options = {}) {
           <div class="space-y-2">
             ${TOOLS.images.slice(8).map(t => toolLink(t)).join('')}
             ${TOOLS.documents.map(t => toolLink(t)).join('')}
+            ${(TOOLS.pdf || []).map(t => toolLink(t)).join('')}
             ${TOOLS.data.map(t => toolLink(t)).join('')}
             ${TOOLS.compress.map(t => toolLink(t)).join('')}
+            ${(TOOLS.utilities || []).map(t => toolLink(t)).join('')}
             ${(TOOLS.ai || []).map(t => toolLink(t)).join('')}
           </div>
         </div>

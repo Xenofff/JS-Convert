@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>Split PDF Online — Extract Pages Free | JS-Convert</title>
+  <meta name="description" content="Split a PDF file and extract specific pages. Choose page ranges, preview thumbnails, and download individual PDFs. 100% private." />
+  <link rel="canonical" href="https://jsconvert.site/split-pdf/" />
+  <meta property="og:title" content="Split PDF — Extract Pages Free | JS-Convert" />
+  <meta property="og:description" content="Split PDF files in your browser. Extract pages by range. No uploads needed." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+    .page-thumb{transition:all .2s}
+    .page-thumb:hover{transform:scale(1.05);box-shadow:0 4px 20px rgba(79,70,229,.2)}
+    .page-thumb.selected{ring:2px solid #4F46E5}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">Split PDF</h1>
+      <p class="text-slate-500 dark:text-slate-400 font-medium">Extract specific pages from a PDF. Preview thumbnails, choose page ranges, download as ZIP.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[200px]">
+          <input type="file" id="fileInput" class="hidden" accept=".pdf,application/pdf" />
+          <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop a PDF file here or click to browse</p>
+        </div>
+
+        <div id="previewSection" class="mt-8 hidden">
+          <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mb-3">Page Preview</label>
+          <div id="pagePreviews" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-6"></div>
+
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Page Ranges</label>
+              <input id="rangeInput" type="text" placeholder="e.g. 1-3, 5, 7-9" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold outline-none focus:ring-2 ring-brand/50 transition-all" />
+              <p class="text-xs text-slate-400 font-medium">Enter page ranges separated by commas. Use hyphens for ranges.</p>
+            </div>
+
+            <div id="selectedInfo" class="text-xs text-slate-500 dark:text-slate-400 font-medium"></div>
+
+            <button id="splitBtn" disabled class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Split & Download</span>
+              <i data-lucide="scissors" class="w-5 h-5"></i>
+            </button>
+            <div id="status" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to split a PDF online</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Upload your PDF file by dragging it into the dropzone</li>
+          <li>Preview page thumbnails to see what you're working with</li>
+          <li>Enter page ranges (e.g. "1-3, 5, 7-9") or select pages by clicking</li>
+          <li>Click "Split & Download" to get your files as a ZIP archive</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is it safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Absolutely. Your PDF never leaves your device. All splitting happens locally in your browser using pdf-lib and PDF.js. No data is sent to any server.
+        </p>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I extract a single page from a PDF?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. Simply enter the page number (e.g. "5") in the range field. You can also click the page thumbnail to select it directly.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What format are the extracted pages saved in?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Each extracted range is saved as a separate PDF file. If you extract multiple ranges, they are bundled into a ZIP archive for easy download.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Does it preserve bookmarks and annotations?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Page content, images, and basic formatting are preserved. However, bookmarks, annotations, and some interactive elements may not transfer to the split files.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Split PDF' });
+
+    const { PDFDocument } = PDFLib;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const dropzone = document.getElementById('dropzone');
+    const dropzoneIconWrap = document.getElementById('dropzoneIconWrap');
+    const fileInput = document.getElementById('fileInput');
+    const previewSection = document.getElementById('previewSection');
+    const pagePreviews = document.getElementById('pagePreviews');
+    const rangeInput = document.getElementById('rangeInput');
+    const selectedInfo = document.getElementById('selectedInfo');
+    const splitBtn = document.getElementById('splitBtn');
+    const status = document.getElementById('status');
+    const progressInner = document.getElementById('progressInner');
+
+    let pdfFile = null;
+    let pdfDoc = null;
+    let totalPages = 0;
+    let dragCounter = 0;
+
+    function setDropActive(active) {
+      if (active) {
+        dropzone.classList.add('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        dropzoneIconWrap?.classList.add('text-brand', 'animate-bounce');
+      } else {
+        dropzone.classList.remove('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        dropzoneIconWrap?.classList.remove('text-brand', 'animate-bounce');
+      }
+    }
+
+    function parseRanges(text) {
+      const pages = new Set();
+      text.split(',').forEach(part => {
+        part = part.trim();
+        if (!part) return;
+        if (part.includes('-')) {
+          const [a, b] = part.split('-').map(Number);
+          if (!isNaN(a) && !isNaN(b)) {
+            for (let i = Math.min(a, b); i <= Math.max(a, b); i++) {
+              if (i >= 1 && i <= totalPages) pages.add(i);
+            }
+          }
+        } else {
+          const n = Number(part);
+          if (!isNaN(n) && n >= 1 && n <= totalPages) pages.add(n);
+        }
+      });
+      return [...pages].sort((a, b) => a - b);
+    }
+
+    function updateInfo() {
+      const pages = parseRanges(rangeInput.value);
+      if (pages.length) {
+        selectedInfo.textContent = `${pages.length} page(s) selected: ${pages.join(', ')}`;
+        splitBtn.disabled = false;
+      } else {
+        selectedInfo.textContent = '';
+        splitBtn.disabled = true;
+      }
+    }
+
+    async function renderPreviews() {
+      pagePreviews.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const page = await pdfDoc.getPage(i);
+        const viewport = page.getViewport({ scale: 0.3 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.className = 'rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer page-thumb';
+        canvas.title = `Page ${i}`;
+        const ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative';
+        const label = document.createElement('div');
+        label.className = 'absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-slate-900/70 text-white px-2 py-0.5 rounded-full';
+        label.textContent = i;
+        wrapper.appendChild(canvas);
+        wrapper.appendChild(label);
+
+        canvas.addEventListener('click', () => {
+          const current = rangeInput.value;
+          const pageExists = current.split(',').some(p => {
+            p = p.trim();
+            if (p.includes('-')) {
+              const [a, b] = p.split('-').map(Number);
+              return i >= a && i <= b;
+            }
+            return Number(p) === i;
+          });
+          if (pageExists) {
+            const parts = current.split(',').map(p => p.trim()).filter(Boolean);
+            const newParts = parts.filter(p => {
+              if (p.includes('-')) {
+                const [a, b] = p.split('-').map(Number);
+                return !(i >= a && i <= b);
+              }
+              return Number(p) !== i;
+            });
+            rangeInput.value = newParts.join(', ');
+          } else {
+            rangeInput.value = current ? `${current}, ${i}` : String(i);
+          }
+          updateInfo();
+        });
+
+        pagePreviews.appendChild(wrapper);
+      }
+    }
+
+    async function loadPdf(file) {
+      pdfFile = file;
+      const arrayBuffer = await file.arrayBuffer();
+      pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      totalPages = pdfDoc.numPages;
+      previewSection.classList.remove('hidden');
+      await renderPreviews();
+      updateInfo();
+    }
+
+    rangeInput.addEventListener('input', updateInfo);
+
+    dropzone.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) loadPdf(file);
+      fileInput.value = '';
+    });
+
+    dropzone.addEventListener('dragenter', (e) => { e.preventDefault(); dragCounter++; if (dragCounter === 1) setDropActive(true); });
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    dropzone.addEventListener('dragleave', (e) => { e.preventDefault(); dragCounter--; if (dragCounter <= 0) { dragCounter = 0; setDropActive(false); } });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      setDropActive(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (file) loadPdf(file);
+    });
+
+    splitBtn.addEventListener('click', async () => {
+      if (!pdfFile) return;
+      const pages = parseRanges(rangeInput.value);
+      if (!pages.length) return;
+
+      splitBtn.disabled = true;
+      status.classList.remove('hidden');
+      status.textContent = 'Loading PDF...';
+      progressInner.style.width = '10%';
+
+      try {
+        const arrayBuffer = await pdfFile.arrayBuffer();
+        const srcPdf = await PDFDocument.load(arrayBuffer);
+        const zip = new JSZip();
+
+        if (pages.length === 1) {
+          const newPdf = await PDFDocument.create();
+          const [page] = await newPdf.copyPages(srcPdf, [pages[0] - 1]);
+          newPdf.addPage(page);
+          const bytes = await newPdf.save();
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          downloadBlob(blob, `page_${pages[0]}.pdf`);
+        } else {
+          for (let i = 0; i < pages.length; i++) {
+            status.textContent = `Extracting page ${pages[i]} (${i + 1}/${pages.length})...`;
+            progressInner.style.width = `${10 + (i / pages.length) * 80}%`;
+            const newPdf = await PDFDocument.create();
+            const [page] = await newPdf.copyPages(srcPdf, [pages[i] - 1]);
+            newPdf.addPage(page);
+            const bytes = await newPdf.save();
+            zip.file(`page_${pages[i]}.pdf`, bytes);
+          }
+
+          status.textContent = 'Creating ZIP...';
+          progressInner.style.width = '95%';
+          const zipBlob = await zip.generateAsync({ type: 'blob' });
+          downloadBlob(zipBlob, 'split_pages.zip');
+        }
+
+        progressInner.style.width = '100%';
+        status.textContent = 'Done! Download started.';
+        setTimeout(() => {
+          status.classList.add('hidden');
+          progressInner.style.width = '0%';
+          splitBtn.disabled = false;
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+        status.textContent = 'Error: ' + err.message;
+        splitBtn.disabled = false;
+        setTimeout(() => { status.classList.add('hidden'); progressInner.style.width = '0%'; }, 3000);
+      }
+    });
+
+    function downloadBlob(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

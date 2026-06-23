@@ -22,8 +22,17 @@ export const TOOLS = {
     { href: '/json-to-csv/', title: 'JSON to CSV', icon: 'table', key: 'json-to-csv' },
     { href: '/csv-to-json/', title: 'CSV to JSON', icon: 'braces', key: 'csv-to-json' }
   ],
+  pdf: [
+    { href: '/merge-pdf/',    title: 'Merge PDF',    icon: 'combine',      key: 'merge-pdf'    },
+    { href: '/split-pdf/',    title: 'Split PDF',    icon: 'scissors',     key: 'split-pdf'    },
+    { href: '/compress-pdf/', title: 'Compress PDF', icon: 'file-minus',   key: 'compress-pdf' },
+    { href: '/rotate-pdf/',   title: 'Rotate PDF',   icon: 'rotate-cw',    key: 'rotate-pdf'   }
+  ],
   compress: [
     { href: '/compress/', title: 'Compress Images', icon: 'minimize-2', key: 'compress' }
+  ],
+  utilities: [
+    { href: '/qr-code/', title: 'QR Code Generator', icon: 'qr-code', key: 'qr-code' }
   ],
   ai: [
     { href: '/image-to-text/', title: 'Image to Text (OCR)', icon: 'scan-text', key: 'image-to-text' },
@@ -34,7 +43,9 @@ export const TOOLS = {
 export const ALL_TOOLS = [
   ...TOOLS.images,
   ...TOOLS.documents,
+  ...TOOLS.pdf,
   ...TOOLS.compress,
   ...TOOLS.data,
+  ...TOOLS.utilities,
   ...TOOLS.ai
 ];

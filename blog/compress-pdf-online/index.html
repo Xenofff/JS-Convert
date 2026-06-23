@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>How to Compress a PDF Without Losing Quality | JS-Convert</title>
+  <meta name="description" content="Learn how to reduce PDF file size in your browser without sacrificing readability or image quality. Free, private, no uploads." />
+  <link rel="canonical" href="https://jsconvert.site/blog/compress-pdf-online/" />
+  <meta property="og:title" content="How to Compress a PDF Without Losing Quality" />
+  <meta property="og:description" content="Reduce PDF file size in your browser. No server uploads. Instant and free." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">PDF Tools</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">How to Compress a PDF Without Losing Quality</h1>
+        <p class="text-slate-500">Published: May 10, 2025 · 3 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>
+          Large PDF files can be a problem — they're slow to email, hard to upload, and take up unnecessary storage. The good news is you can significantly reduce PDF file size without making the content unreadable.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">Why are PDFs so large?</h2>
+        <p>
+          PDFs are often large because of embedded high-resolution images. A single page with a 300 DPI photo can easily be several megabytes. Text and vector graphics compress very well, but raster images take up most of the space.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">How to compress a PDF in your browser</h2>
+        <ol class="list-decimal ml-5 space-y-2">
+          <li>Open a browser-based PDF compressor (no software installation needed)</li>
+          <li>Upload your PDF by dragging it into the dropzone</li>
+          <li>Adjust the image quality slider — 75% is usually a great balance</li>
+          <li>Download the compressed PDF and check the file size reduction</li>
+        </ol>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">Tips for better compression</h2>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Lower image quality:</strong> Reducing from 100% to 75% can cut size by 50% with minimal visual difference</li>
+          <li><strong>Remove unused pages:</strong> Use a PDF splitter to extract only the pages you need</li>
+          <li><strong>Flatten annotations:</strong> Merging layers can sometimes reduce overhead</li>
+          <li><strong>Use WebP for embedded images:</strong> Some compressors can re-encode images to more efficient formats</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">What about text quality?</h2>
+        <p>
+          Text is not affected by image compression. Your fonts, vectors, and page layout remain exactly the same. Only the embedded raster images are recompressed at a lower quality level.
+        </p>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/compress-pdf/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Compress PDF <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

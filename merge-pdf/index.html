@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>Merge PDF Files Online — Free & Private | JS-Convert</title>
+  <meta name="description" content="Merge multiple PDF files into one document directly in your browser. Free, private, no uploads needed." />
+  <link rel="canonical" href="https://jsconvert.site/merge-pdf/" />
+  <meta property="og:title" content="Merge PDF Files — Free Online Tool | JS-Convert" />
+  <meta property="og:description" content="Combine multiple PDF files into one. 100% client-side — no server uploads." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+    .drag-over{border-color:#4F46E5!important;background:rgba(79,70,229,.05)!important}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">Merge PDF</h1>
+      <p class="text-slate-500 dark:text-slate-400 font-medium">Combine multiple PDF files into one. Drag to reorder. 100% private — runs in your browser.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[200px]">
+          <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,application/pdf" />
+          <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop PDF files here or click to browse</p>
+          <p class="mt-2 text-xs text-slate-400 font-bold">Select 2 or more PDF files to merge</p>
+        </div>
+
+        <div id="fileListContainer" class="mt-6 hidden">
+          <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mb-3">Files to merge (drag to reorder)</label>
+          <div id="fileList" class="space-y-2"></div>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-4">
+          <button id="mergeBtn" disabled class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+            <span>Merge PDFs</span>
+            <i data-lucide="combine" class="w-5 h-5"></i>
+          </button>
+          <div id="status" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to merge PDF files online</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Click the upload area or drag multiple PDF files into the dropzone</li>
+          <li>Drag and drop the files to arrange them in the order you want</li>
+          <li>Click "Merge PDFs" to combine them into a single document</li>
+          <li>Download the merged PDF instantly — no server, no waiting</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is it safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Yes. All processing happens directly in your browser using pdf-lib. Your files are never uploaded to any server. Once you close this tab, the files are gone.
+        </p>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Is there a limit to how many PDFs I can merge?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">There is no hard limit from our tool. The only constraint is your browser's memory. We recommend keeping it under 50 files for best performance.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will merging reduce the quality of my PDF?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">No. Merging PDFs with pdf-lib preserves the original quality of all pages. The content is copied exactly as-is into the new document.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Does it work with password-protected PDFs?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Currently, only unprotected PDFs can be merged. If your PDF is password-protected, you'll need to remove the password first before merging.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Merge PDF' });
+
+    const { PDFDocument } = PDFLib;
+
+    const dropzone = document.getElementById('dropzone');
+    const dropzoneIconWrap = document.getElementById('dropzoneIconWrap');
+    const fileInput = document.getElementById('fileInput');
+    const fileListContainer = document.getElementById('fileListContainer');
+    const fileList = document.getElementById('fileList');
+    const mergeBtn = document.getElementById('mergeBtn');
+    const status = document.getElementById('status');
+    const progressInner = document.getElementById('progressInner');
+
+    let files = [];
+    let dragCounter = 0;
+    let dragSrcIndex = null;
+
+    function fmt(bytes) {
+      if (!bytes) return '0 B';
+      const k = 1024;
+      const u = ['B','KB','MB','GB'];
+      const i = Math.floor(Math.log(bytes)/Math.log(k));
+      return `${parseFloat((bytes/Math.pow(k,i)).toFixed(1))} ${u[i]}`;
+    }
+
+    function downloadBlob(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function setDropActive(active) {
+      if (active) {
+        dropzone.classList.add('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        dropzoneIconWrap?.classList.add('text-brand', 'animate-bounce');
+      } else {
+        dropzone.classList.remove('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        dropzoneIconWrap?.classList.remove('text-brand', 'animate-bounce');
+      }
+    }
+
+    function renderList() {
+      if (!files.length) {
+        fileListContainer.classList.add('hidden');
+        mergeBtn.disabled = true;
+        return;
+      }
+      fileListContainer.classList.remove('hidden');
+      mergeBtn.disabled = files.length < 2;
+
+      fileList.innerHTML = files.map((f, i) => `
+        <div class="flex items-center gap-3 text-xs bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2.5 cursor-grab active:cursor-grabbing" draggable="true" data-idx="${i}">
+          <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <i data-lucide="file-text" class="w-3 h-3 text-red-400 flex-shrink-0"></i>
+            <span class="truncate text-slate-700 dark:text-slate-300 font-medium">${f.name}</span>
+          </div>
+          <span class="text-slate-400 flex-shrink-0">${fmt(f.size)}</span>
+          <button class="ml-1 p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors flex-shrink-0" data-remove="${i}">
+            <i data-lucide="x" class="w-3 h-3"></i>
+          </button>
+        </div>
+      `).join('');
+
+      fileList.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          files.splice(Number(btn.getAttribute('data-remove')), 1);
+          renderList();
+          window.lucide?.createIcons?.();
+        });
+      });
+
+      fileList.querySelectorAll('[draggable]').forEach(el => {
+        el.addEventListener('dragstart', (e) => {
+          dragSrcIndex = Number(el.dataset.idx);
+          el.classList.add('opacity-50');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        el.addEventListener('dragend', () => {
+          el.classList.remove('opacity-50');
+          dragSrcIndex = null;
+          fileList.querySelectorAll('[draggable]').forEach(e => e.classList.remove('drag-over'));
+        });
+        el.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          el.classList.add('drag-over');
+        });
+        el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+        el.addEventListener('drop', (e) => {
+          e.preventDefault();
+          el.classList.remove('drag-over');
+          const targetIndex = Number(el.dataset.idx);
+          if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+          const [moved] = files.splice(dragSrcIndex, 1);
+          files.splice(targetIndex, 0, moved);
+          renderList();
+          window.lucide?.createIcons?.();
+        });
+      });
+
+      window.lucide?.createIcons?.();
+    }
+
+    function addFiles(newFiles) {
+      const pdfs = Array.from(newFiles).filter(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+      files.push(...pdfs);
+      renderList();
+    }
+
+    dropzone.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', (e) => {
+      addFiles(e.target.files || []);
+      fileInput.value = '';
+    });
+
+    dropzone.addEventListener('dragenter', (e) => { e.preventDefault(); dragCounter++; if (dragCounter === 1) setDropActive(true); });
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    dropzone.addEventListener('dragleave', (e) => { e.preventDefault(); dragCounter--; if (dragCounter <= 0) { dragCounter = 0; setDropActive(false); } });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      setDropActive(false);
+      addFiles(e.dataTransfer?.files || []);
+    });
+
+    mergeBtn.addEventListener('click', async () => {
+      if (files.length < 2) return;
+      mergeBtn.disabled = true;
+      status.classList.remove('hidden');
+      status.textContent = 'Loading PDF documents...';
+      progressInner.style.width = '10%';
+
+      try {
+        const mergedPdf = await PDFDocument.create();
+        for (let i = 0; i < files.length; i++) {
+          status.textContent = `Processing ${i + 1} of ${files.length}: ${files[i].name}`;
+          progressInner.style.width = `${10 + (i / files.length) * 80}%`;
+          const arrayBuffer = await files[i].arrayBuffer();
+          const pdf = await PDFDocument.load(arrayBuffer);
+          const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          pages.forEach(page => mergedPdf.addPage(page));
+        }
+
+        progressInner.style.width = '95%';
+        status.textContent = 'Generating merged PDF...';
+        const mergedBytes = await mergedPdf.save();
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        downloadBlob(blob, 'merged.pdf');
+
+        progressInner.style.width = '100%';
+        status.textContent = 'Done! Merged PDF downloaded.';
+        setTimeout(() => {
+          files = [];
+          renderList();
+          status.classList.add('hidden');
+          progressInner.style.width = '0%';
+          mergeBtn.disabled = false;
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+        status.textContent = 'Error: ' + err.message;
+        mergeBtn.disabled = false;
+        setTimeout(() => { status.classList.add('hidden'); progressInner.style.width = '0%'; }, 3000);
+      }
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

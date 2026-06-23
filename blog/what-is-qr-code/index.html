@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>What Is a QR Code and How Does It Work? | JS-Convert</title>
+  <meta name="description" content="Everything you need to know about QR codes — from how they work to how you can create and scan them with your browser." />
+  <link rel="canonical" href="https://jsconvert.site/blog/what-is-qr-code/" />
+  <meta property="og:title" content="What Is a QR Code and How Does It Work?" />
+  <meta property="og:description" content="Learn how QR codes work and how to create and scan them for free." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Tips</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">What Is a QR Code and How Does It Work?</h1>
+        <p class="text-slate-500">Published: April 15, 2025 · 6 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>
+          QR codes are everywhere — on restaurant menus, product packaging, business cards, and even tombstones. But how do these little square patterns actually work? Let's break it down.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">What does QR stand for?</h2>
+        <p>
+          QR stands for "Quick Response." It was invented in 1994 by Denso Wave, a Japanese subsidiary of Toyota, to track vehicles and parts during manufacturing. The format was designed to be read quickly — hence the name.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">How does a QR code work?</h2>
+        <p>
+          A QR code is a two-dimensional barcode that encodes data in a grid of black and white squares. Unlike traditional barcodes that store data in one direction, QR codes store data both horizontally and vertically — allowing them to hold much more information.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">QR code structure</h2>
+        <ul class="list-disc ml-5 space-y-1">
+          <li><strong>Finder patterns:</strong> The three large squares in the corners that help scanners locate the code</li>
+          <li><strong>Alignment pattern:</strong> A smaller square that helps correct for distortion</li>
+          <li><strong>Timing patterns:</strong> Alternating黑白 rows/columns that help determine the grid size</li>
+          <li><strong>Data modules:</strong> The actual encoded data in the remaining squares</li>
+          <li><strong>Error correction:</strong> Redundant data that allows the code to be read even if partially damaged</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">What can QR codes store?</h2>
+        <ul class="list-disc ml-5 space-y-1">
+          <li>URLs and web links</li>
+          <li>Contact information (vCard)</li>
+          <li>Plain text messages</li>
+          <li>Wi-Fi network credentials</li>
+          <li>Email addresses and phone numbers</li>
+          <li>Payment information</li>
+        </ul>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">Error correction levels</h2>
+        <p>
+          QR codes have four error correction levels: L (7%), M (15%), Q (25%), and H (30%). Higher levels allow the code to be read even if up to 30% of it is damaged or obscured. This is why you can sometimes add a logo to the center of a QR code and it still works.
+        </p>
+
+        <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 pt-4">How to create your own QR code</h2>
+        <p>
+          You can generate QR codes for free using browser-based tools. Simply enter the text or URL you want to encode, customize the colors and size, and download the QR code as PNG or SVG. No software installation needed.
+        </p>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/qr-code/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Generate QR Code <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

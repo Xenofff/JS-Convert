@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>File Conversion Blog — Tips & Guides | JS-Convert</title>
+  <meta name="description" content="Guides, tips, and tutorials on file conversion, image formats, PDF tools, and more from JS-Convert." />
+  <link rel="canonical" href="https://jsconvert.site/blog/" />
+  <meta property="og:title" content="File Conversion Blog — JS-Convert" />
+  <meta property="og:description" content="Guides and tutorials on file conversion, image formats, and PDF tools." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-5xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">Blog</h1>
+      <p class="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">Guides, tips, and tutorials on file conversion, image formats, PDF tools, and more.</p>
+    </div>
+
+    <div id="filters" class="flex flex-wrap justify-center gap-2 mb-10">
+      <button data-cat="all" class="cat-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-brand bg-brand/10 text-brand transition-all">All</button>
+      <button data-cat="Image Tools" class="cat-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200 dark:border-slate-700 hover:border-brand transition-all">Image Tools</button>
+      <button data-cat="PDF Tools" class="cat-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200 dark:border-slate-700 hover:border-brand transition-all">PDF Tools</button>
+      <button data-cat="File Formats" class="cat-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200 dark:border-slate-700 hover:border-brand transition-all">File Formats</button>
+      <button data-cat="Tips" class="cat-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200 dark:border-slate-700 hover:border-brand transition-all">Tips</button>
+    </div>
+
+    <div id="postsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    import { POSTS } from '/blog/posts.js';
+
+    initLayout({ pageTitle: 'Blog' });
+
+    const postsGrid = document.getElementById('postsGrid');
+    const catBtns = document.querySelectorAll('.cat-btn');
+    let activeCat = 'all';
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function renderPosts(cat) {
+      const filtered = cat === 'all' ? POSTS : POSTS.filter(p => p.category === cat);
+      postsGrid.innerHTML = filtered.map(post => `
+        <a href="/blog/${post.slug}/" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 hover:border-brand transition-all shadow-sm hover:shadow-md hover:shadow-slate-200/50 dark:hover:shadow-none flex flex-col">
+          <div class="mb-4">
+            <span class="text-[10px] font-black uppercase tracking-widest text-brand bg-brand/10 px-3 py-1 rounded-full">${post.category}</span>
+          </div>
+          <h2 class="text-lg font-black text-slate-800 dark:text-slate-100 mb-2 group-hover:text-brand transition-colors leading-snug">${post.title}</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">${post.description}</p>
+          <div class="flex items-center justify-between text-xs text-slate-400 font-bold">
+            <span>${formatDate(post.date)}</span>
+            <span>${post.readTime}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        activeCat = cat;
+        catBtns.forEach(b => {
+          b.classList.remove('bg-brand/10', 'text-brand', 'border-brand');
+          b.classList.add('border-slate-200', 'dark:border-slate-700');
+        });
+        btn.classList.add('bg-brand/10', 'text-brand', 'border-brand');
+        btn.classList.remove('border-slate-200', 'dark:border-slate-700');
+        renderPosts(cat);
+      });
+    });
+
+    renderPosts('all');
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>
