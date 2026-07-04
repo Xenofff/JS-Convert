@@ -52,5 +52,23 @@ export const POSTS = [
     category: 'File Formats',
     readTime: '7 min',
     tool: '/compress/'
+  },
+  {
+    slug: 'mp3-vs-wav',
+    title: 'MP3 vs WAV: Which Audio Format Should You Choose?',
+    description: 'Compare MP3 and WAV audio formats — file size, quality, compatibility, and when to use each one.',
+    date: '2025-06-15',
+    category: 'Audio',
+    readTime: '5 min',
+    tool: '/mp3-to-wav/'
+  },
+  {
+    slug: 'm4a-to-mp3-guide',
+    title: 'How to Convert M4A to MP3 (iPhone Voice Memos & Apple Music)',
+    description: 'Convert M4A audio files to universally compatible MP3 format. Works with iPhone voice memos, GarageBand exports, and Apple Music files.',
+    date: '2025-06-20',
+    category: 'Audio',
+    readTime: '4 min',
+    tool: '/m4a-to-mp3/'
   }
 ];
