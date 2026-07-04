@@ -22,6 +22,11 @@ export const TOOLS = {
     { href: '/json-to-csv/', title: 'JSON to CSV', icon: 'table', key: 'json-to-csv' },
     { href: '/csv-to-json/', title: 'CSV to JSON', icon: 'braces', key: 'csv-to-json' }
   ],
+  audio: [
+    { href: '/mp3-to-wav/', title: 'MP3 to WAV', icon: 'music', key: 'mp3-to-wav' },
+    { href: '/wav-to-mp3/', title: 'WAV to MP3', icon: 'music-2', key: 'wav-to-mp3' },
+    { href: '/m4a-to-mp3/', title: 'M4A to MP3', icon: 'headphones', key: 'm4a-to-mp3' }
+  ],
   pdf: [
     { href: '/merge-pdf/',    title: 'Merge PDF',    icon: 'combine',      key: 'merge-pdf'    },
     { href: '/split-pdf/',    title: 'Split PDF',    icon: 'scissors',     key: 'split-pdf'    },
@@ -46,6 +51,7 @@ export const ALL_TOOLS = [
   ...TOOLS.pdf,
   ...TOOLS.compress,
   ...TOOLS.data,
+  ...TOOLS.audio,
   ...TOOLS.utilities,
   ...TOOLS.ai
 ];
