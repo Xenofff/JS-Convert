@@ -37,7 +37,27 @@ export const TOOLS = {
     { href: '/compress/', title: 'Compress Images', icon: 'minimize-2', key: 'compress' }
   ],
   utilities: [
-    { href: '/qr-code/', title: 'QR Code Generator', icon: 'qr-code', key: 'qr-code' }
+    { href: '/qr-code/', title: 'QR Code Generator', icon: 'qr-code', key: 'qr-code' },
+    { href: '/color-converter/', title: 'Color Converter', icon: 'palette', key: 'color-converter' }
+  ],
+  subtitles: [
+    { href: '/srt-to-vtt/', title: 'SRT to VTT', icon: 'captions', key: 'srt-to-vtt' },
+    { href: '/vtt-to-srt/', title: 'VTT to SRT', icon: 'captions', key: 'vtt-to-srt' }
+  ],
+  fonts: [
+    { href: '/ttf-to-woff2/', title: 'TTF to WOFF2', icon: 'type', key: 'ttf-to-woff2' },
+    { href: '/woff2-to-ttf/', title: 'WOFF2 to TTF', icon: 'type', key: 'woff2-to-ttf' }
+  ],
+  icons: [
+    { href: '/png-to-ico/', title: 'PNG to ICO', icon: 'image-plus', key: 'png-to-ico' },
+    { href: '/ico-to-png/', title: 'ICO to PNG', icon: 'image-minus', key: 'ico-to-png' }
+  ],
+  dev: [
+    { href: '/xml-to-json/', title: 'XML to JSON', icon: 'braces', key: 'xml-to-json' },
+    { href: '/json-to-xml/', title: 'JSON to XML', icon: 'code', key: 'json-to-xml' }
+  ],
+  calendar: [
+    { href: '/ics-to-csv/', title: 'ICS to CSV', icon: 'calendar', key: 'ics-to-csv' }
   ],
   ai: [
     { href: '/image-to-text/', title: 'Image to Text (OCR)', icon: 'scan-text', key: 'image-to-text' },
@@ -53,5 +73,10 @@ export const ALL_TOOLS = [
   ...TOOLS.data,
   ...TOOLS.audio,
   ...TOOLS.utilities,
+  ...TOOLS.subtitles,
+  ...TOOLS.fonts,
+  ...TOOLS.icons,
+  ...TOOLS.dev,
+  ...TOOLS.calendar,
   ...TOOLS.ai
 ];

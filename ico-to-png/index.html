@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>ICO to PNG Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Extract PNG images from ICO files online for free. Preview all icon sizes. 100% private — nothing leaves your browser." />
+  <link rel="canonical" href="https://jsconvert.site/ico-to-png/" />
+  <meta property="og:title" content="ICO to PNG Converter" />
+  <meta property="og:description" content="Free browser-based ICO to PNG extraction. Download individual sizes or all as ZIP." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/components/lucide.min.js"></script>
+  <script src="/ico-to-png/jszip.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">ICO to PNG Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Extract PNG images from ICO files instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+          <input type="file" id="fileInput" class="hidden" accept=".ico,image/x-icon,image/vnd.microsoft.icon" />
+          <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop an ICO file here or click to browse</p>
+          <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+          <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+        </div>
+
+        <div class="flex flex-col gap-4 mt-8">
+          <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+            <span>Extract PNGs</span>
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+          <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+        </div>
+
+        <div id="resultsArea" class="hidden mt-8 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-black uppercase tracking-[0.1em] text-slate-400">Extracted Images</h2>
+            <button id="downloadAllBtn" class="text-xs font-bold text-brand hover:text-indigo-700 transition-colors flex items-center gap-1">
+              <i data-lucide="download" class="w-3 h-3"></i>
+              <span>Download All (ZIP)</span>
+            </button>
+          </div>
+          <div id="imageGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to extract PNG from ICO</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Upload an ICO file via drag &amp; drop or click</li>
+          <li>Preview all extracted sizes and individual PNGs</li>
+          <li>Download each size separately or get all as a ZIP</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Your ICO file stays in your browser. No upload, no server — everything is processed locally.</p>
+        <h2 class="text-xl font-black pt-4">ICO vs PNG — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">ICO</th><th class="px-4 py-3 font-black">PNG</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Multiple sizes</td><td class="px-4 py-3">Yes (bundled)</td><td class="px-4 py-3">One file per size</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Use case</td><td class="px-4 py-3">Favicons, desktop icons</td><td class="px-4 py-3">Web, apps, editing</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">Full alpha (PNG-based)</td><td class="px-4 py-3">Full alpha</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Compression</td><td class="px-4 py-3">Stores uncompressed PNG data</td><td class="px-4 py-3">Lossless compression</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Platform</td><td class="px-4 py-3">Windows primarily</td><td class="px-4 py-3">Universal</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What sizes are inside an ICO file?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">ICO files typically contain 16x16, 32x32, 48x48, 64x64, 128x128, and 256x256 pixel images. Not all sizes are guaranteed — it depends on how the ICO was created.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I extract transparent ICOs?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. Modern ICO files store PNG data internally, so alpha transparency is fully preserved when you extract the PNG images.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Why extract ICO to PNG?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">PNG is easier to edit, resize, and use in web projects. Extracting individual sizes lets you use them as separate assets, optimize them further, or convert to other formats.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+
+    initLayout({ pageTitle: 'ICO to PNG Converter' });
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const filesList = document.getElementById('filesList');
+    const fileCountDisplay = document.getElementById('fileCountDisplay');
+    const convertBtn = document.getElementById('convertBtn');
+    const progressInner = document.getElementById('progressInner');
+    const conversionStatus = document.getElementById('conversionStatus');
+    const resultsArea = document.getElementById('resultsArea');
+    const imageGrid = document.getElementById('imageGrid');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+    let selectedFile = null;
+    let extractedImages = [];
+    let dragCounter = 0;
+
+    function setDropActive(active) {
+      const iconWrap = document.getElementById('dropzoneIconWrap');
+      if (active) {
+        dropzone.classList.add('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        iconWrap?.classList.add('text-brand', 'animate-bounce');
+      } else {
+        dropzone.classList.remove('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        iconWrap?.classList.remove('text-brand', 'animate-bounce');
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (!bytes) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+    }
+
+    function renderList() {
+      if (!selectedFile) {
+        filesList.classList.add('hidden');
+        fileCountDisplay.classList.add('hidden');
+        filesList.innerHTML = '';
+        return;
+      }
+
+      filesList.classList.remove('hidden');
+      fileCountDisplay.classList.remove('hidden');
+      fileCountDisplay.textContent = selectedFile.name;
+
+      filesList.innerHTML = '';
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between text-xs bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5';
+
+      const left = document.createElement('div');
+      left.className = 'flex items-center gap-2 flex-1 min-w-0';
+
+      const fileIcon = document.createElement('i');
+      fileIcon.setAttribute('data-lucide', 'file');
+      fileIcon.className = 'w-3 h-3 text-slate-500 flex-shrink-0';
+
+      const fileName = document.createElement('span');
+      fileName.className = 'truncate text-slate-700 dark:text-slate-300';
+      fileName.textContent = selectedFile.name;
+
+      const fileSize = document.createElement('span');
+      fileSize.className = 'text-slate-400 flex-shrink-0 ml-2';
+      fileSize.textContent = formatFileSize(selectedFile.size);
+
+      left.appendChild(fileIcon);
+      left.appendChild(fileName);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'ml-2 p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors flex-shrink-0';
+      removeBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+      removeBtn.onclick = (e) => {
+        e.stopPropagation();
+        selectedFile = null;
+        renderList();
+        window.lucide?.createIcons?.();
+      };
+
+      row.appendChild(left);
+      row.appendChild(fileSize);
+      row.appendChild(removeBtn);
+      filesList.appendChild(row);
+
+      window.lucide?.createIcons?.();
+    }
+
+    function addFile(file) {
+      const validTypes = ['image/x-icon', 'image/vnd.microsoft.icon'];
+      if (!validTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.ico')) {
+        alert('Please select an ICO file');
+        return;
+      }
+      selectedFile = file;
+      extractedImages = [];
+      resultsArea.classList.add('hidden');
+      imageGrid.innerHTML = '';
+      renderList();
+    }
+
+    function parseIco(arrayBuffer) {
+      const view = new DataView(arrayBuffer);
+      const bytes = new Uint8Array(arrayBuffer);
+
+      const reserved = view.getUint16(0, true);
+      const type = view.getUint16(2, true);
+      const numImages = view.getUint16(4, true);
+
+      if (type !== 1) throw new Error('Not a valid ICO file');
+
+      const images = [];
+      for (let i = 0; i < numImages; i++) {
+        const offset = 6 + i * 16;
+        const width = view.getUint8(offset) || 256;
+        const height = view.getUint8(offset + 1) || 256;
+        const dataLength = view.getUint32(offset + 8, true);
+        const dataOffset = view.getUint32(offset + 12, true);
+
+        const pngData = bytes.slice(dataOffset, dataOffset + dataLength);
+        images.push({ width, height, data: pngData });
+      }
+
+      return images;
+    }
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderResults() {
+      resultsArea.classList.remove('hidden');
+      imageGrid.innerHTML = '';
+
+      extractedImages.forEach((img, index) => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 flex flex-col items-center gap-3';
+
+        const preview = document.createElement('div');
+        preview.className = 'w-full aspect-square flex items-center justify-center bg-white dark:bg-slate-900 rounded-xl overflow-hidden';
+        const blob = new Blob([img.data], { type: 'image/png' });
+        const url = URL.createObjectURL(blob);
+        const imgEl = document.createElement('img');
+        imgEl.src = url;
+        imgEl.alt = `${img.width}x${img.height} PNG`;
+        imgEl.className = 'max-w-full max-h-full object-contain';
+        preview.appendChild(imgEl);
+
+        const label = document.createElement('span');
+        label.className = 'text-xs font-bold text-slate-500 dark:text-slate-400';
+        label.textContent = `${img.width}x${img.height}`;
+
+        const dlBtn = document.createElement('button');
+        dlBtn.className = 'w-full text-xs font-bold text-white bg-brand hover:bg-indigo-700 rounded-xl px-3 py-2 transition-colors flex items-center justify-center gap-1';
+        dlBtn.innerHTML = '<i data-lucide="download" class="w-3 h-3"></i><span>Download</span>';
+        dlBtn.onclick = () => {
+          downloadBlob(blob, `icon-${img.width}x${img.height}.png`);
+        };
+
+        card.appendChild(preview);
+        card.appendChild(label);
+        card.appendChild(dlBtn);
+        imageGrid.appendChild(card);
+      });
+
+      window.lucide?.createIcons?.();
+    }
+
+    dropzone.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      fileInput?.click();
+    });
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) addFile(file);
+      fileInput.value = '';
+    });
+
+    dropzone.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      dragCounter++;
+      if (dragCounter === 1) setDropActive(true);
+    });
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+    dropzone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter <= 0) { dragCounter = 0; setDropActive(false); }
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      setDropActive(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (file) addFile(file);
+    });
+
+    convertBtn.addEventListener('click', async () => {
+      if (!selectedFile) {
+        alert('Please select an ICO file');
+        return;
+      }
+
+      convertBtn.disabled = true;
+      conversionStatus.classList.remove('hidden');
+      conversionStatus.textContent = 'Extracting PNGs...';
+      progressInner.style.width = '0%';
+
+      try {
+        progressInner.style.width = '30%';
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        progressInner.style.width = '50%';
+
+        extractedImages = parseIco(arrayBuffer);
+        progressInner.style.width = '80%';
+
+        if (extractedImages.length === 0) {
+          throw new Error('No images found in ICO file');
+        }
+
+        renderResults();
+        progressInner.style.width = '100%';
+        conversionStatus.textContent = `Extracted ${extractedImages.length} image(s)!`;
+      } catch (err) {
+        console.error(err);
+        conversionStatus.textContent = 'Error: ' + err.message;
+      }
+
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        progressInner.style.width = '0%';
+        conversionStatus.classList.add('hidden');
+      }, 2000);
+    });
+
+    downloadAllBtn.addEventListener('click', async () => {
+      if (extractedImages.length === 0 || typeof window.JSZip === 'undefined') return;
+
+      const zip = new window.JSZip();
+      extractedImages.forEach((img) => {
+        const blob = new Blob([img.data], { type: 'image/png' });
+        zip.file(`icon-${img.width}x${img.height}.png`, blob);
+      });
+
+      downloadAllBtn.disabled = true;
+      downloadAllBtn.textContent = 'Zipping...';
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const baseName = selectedFile?.name.replace(/\.ico$/i, '') || 'icons';
+      downloadBlob(zipBlob, `${baseName}-all.zip`);
+
+      downloadAllBtn.disabled = false;
+      downloadAllBtn.innerHTML = '<i data-lucide="download" class="w-3 h-3"></i><span>Download All (ZIP)</span>';
+      window.lucide?.createIcons?.();
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

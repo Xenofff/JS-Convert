@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>WOFF2 to TTF Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert WOFF2 web font files to TTF format online for free. Preview the font before downloading. 100% private." />
+  <link rel="canonical" href="https://jsconvert.site/woff2-to-ttf/" />
+  <meta property="og:title" content="WOFF2 to TTF Converter" />
+  <meta property="og:description" content="Free browser-based WOFF2 to TTF conversion with font preview. Instant, private, no server." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/components/lucide.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">WOFF2 to TTF Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert WOFF2 web fonts back to TrueType format. Preview the font before downloading.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" accept=".woff2,.WOFF2" />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop WOFF2 font here or click to browse</p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div id="fontPreview" class="hidden bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
+              <p class="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mb-3">Preview</p>
+              <p id="previewText" class="text-2xl text-slate-800 dark:text-slate-100" style="font-family: 'LoadedFont'">The quick brown fox jumps over the lazy dog</p>
+              <p class="text-xs text-slate-400 mt-2" id="fontName"></p>
+            </div>
+            <button id="convertBtn" disabled class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert to TTF</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert WOFF2 to TTF</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Drag your WOFF2 font file into the converter or click to browse</li>
+          <li>Preview the font to confirm it loaded correctly</li>
+          <li>Click Convert — decompression happens locally in your browser using WebAssembly</li>
+          <li>Download the resulting TTF file</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert WOFF2 to TTF?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          WOFF2 is optimized for web use but not all desktop applications support it. Converting back to TTF allows you to install the font on your system, use it in design software like Photoshop or Figma, or embed it in documents and presentations.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Font decompression happens entirely in your browser using WebAssembly. No font data is sent to any server.</p>
+        <h2 class="text-xl font-black pt-4">WOFF2 vs TTF — comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">WOFF2</th><th class="px-4 py-3 font-black">TTF</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Compression</td><td class="px-4 py-3">Brotli</td><td class="px-4 py-3">None</td></tr>
+              <tr><td class="px-4 py-3 font-bold">File size</td><td class="px-4 py-3">Smaller</td><td class="px-4 py-3">Larger</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Desktop support</td><td class="px-4 py-3">Limited</td><td class="px-4 py-3">Universal</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Web use</td><td class="px-4 py-3">Recommended</td><td class="px-4 py-3">Supported</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">Web projects</td><td class="px-4 py-3">Desktop, print, install</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will the converted TTF look the same?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. WOFF2 uses lossless Brotli compression. The decompressed TTF is identical to the original source font.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I install the TTF on my computer?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. Double-click the TTF file on Windows or Mac to install it. On Linux, copy to ~/.fonts/ and run fc-cache.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Does this preserve all font features?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. All OpenType tables, kerning, ligatures, and metadata are fully preserved during decompression.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script src="/woff2-to-ttf/decompress_binding.js"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'WOFF2 to TTF Converter' });
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const convertBtn = document.getElementById('convertBtn');
+    const conversionStatus = document.getElementById('conversionStatus');
+    const progressInner = document.getElementById('progressInner');
+    const fontPreview = document.getElementById('fontPreview');
+    const previewText = document.getElementById('previewText');
+    const fontName = document.getElementById('fontName');
+
+    let selectedFile = null;
+    let loadedFontFace = null;
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function loadFontPreview(file) {
+      const buffer = await file.arrayBuffer();
+
+      if (loadedFontFace) {
+        try { document.fonts.delete(loadedFontFace); } catch(e) {}
+      }
+
+      try {
+        loadedFontFace = new FontFace('LoadedFont', buffer);
+        await loadedFontFace.load();
+        document.fonts.add(loadedFontFace);
+        previewText.style.fontFamily = "'LoadedFont', serif";
+        fontName.textContent = file.name;
+        fontPreview.classList.remove('hidden');
+        convertBtn.disabled = false;
+      } catch (e) {
+        fontPreview.classList.add('hidden');
+        convertBtn.disabled = true;
+        conversionStatus.textContent = 'Could not load font preview';
+        conversionStatus.classList.remove('hidden');
+      }
+    }
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        selectedFile = file;
+        loadFontPreview(file);
+      }
+      fileInput.value = '';
+    });
+
+    let dragCounter = 0;
+    dropzone.addEventListener('dragenter', (e) => { e.preventDefault(); dragCounter++; dropzone.classList.add('scale-[1.02]', 'border-brand', 'bg-brand/5'); });
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); });
+    dropzone.addEventListener('dragleave', (e) => { e.preventDefault(); dragCounter--; if (dragCounter <= 0) { dragCounter = 0; dropzone.classList.remove('scale-[1.02]', 'border-brand', 'bg-brand/5'); } });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      dropzone.classList.remove('scale-[1.02]', 'border-brand', 'bg-brand/5');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        selectedFile = file;
+        loadFontPreview(file);
+      }
+    });
+
+    convertBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+      convertBtn.disabled = true;
+      conversionStatus.classList.remove('hidden');
+      conversionStatus.textContent = 'Converting...';
+      progressInner.style.width = '30%';
+
+      try {
+        const buffer = await selectedFile.arrayBuffer();
+        const inputArray = new Uint8Array(buffer);
+
+        progressInner.style.width = '60%';
+
+        let result;
+        if (typeof Module !== 'undefined' && Module.decompress) {
+          result = await Module.decompress(inputArray);
+        } else {
+          throw new Error('Font conversion engine not loaded. Please refresh the page.');
+        }
+
+        progressInner.style.width = '90%';
+
+        if (result) {
+          const blob = new Blob([result], { type: 'font/truetype' });
+          const outName = selectedFile.name.replace(/\.[^.]+$/, '') + '.ttf';
+          downloadBlob(blob, outName);
+          conversionStatus.textContent = 'Complete!';
+        } else {
+          throw new Error('Conversion failed');
+        }
+      } catch (err) {
+        console.error(err);
+        conversionStatus.textContent = 'Error: ' + err.message;
+      }
+
+      progressInner.style.width = '100%';
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        progressInner.style.width = '0%';
+        conversionStatus.classList.add('hidden');
+      }, 2000);
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

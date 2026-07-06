@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>ICS to CSV Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert ICS calendar files to CSV format online for free. Preview events before downloading. 100% private." />
+  <link rel="canonical" href="https://jsconvert.site/ics-to-csv/" />
+  <meta property="og:title" content="ICS to CSV Converter" />
+  <meta property="og:description" content="Free browser-based ICS to CSV conversion. Preview events, instant download." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">ICS to CSV Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert ICS calendar files to CSV instantly in your browser. Preview events before downloading. 100% private.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+          <input type="file" id="fileInput" class="hidden" accept=".ics,text/calendar" />
+          <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop ICS file here or click to browse</p>
+          <p id="fileNameDisplay" class="mt-3 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+        </div>
+
+        <div id="eventCountDisplay" class="mt-4 text-center text-sm font-bold text-slate-500 dark:text-slate-400 hidden"></div>
+      </div>
+
+      <div id="previewSection" class="px-8 md:px-12 pb-8 md:pb-12 hidden">
+        <div class="overflow-x-auto border border-slate-200 dark:border-slate-700 rounded-2xl">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-800">
+              <tr>
+                <th class="px-4 py-3 font-black">Title</th>
+                <th class="px-4 py-3 font-black">Start</th>
+                <th class="px-4 py-3 font-black">End</th>
+                <th class="px-4 py-3 font-black">Location</th>
+              </tr>
+            </thead>
+            <tbody id="eventTableBody" class="divide-y divide-slate-200 dark:divide-slate-700"></tbody>
+          </table>
+        </div>
+        <div class="mt-6 flex items-center justify-between">
+          <p id="previewLabel" class="text-xs font-bold text-slate-400"></p>
+          <button id="downloadBtn" class="bg-brand hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center gap-3">
+            <i data-lucide="download" class="w-5 h-5"></i>
+            <span>Download CSV</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert ICS to CSV</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Export an ICS file from your calendar app (Google, Apple, Outlook)</li>
+          <li>Drop the file here — it is parsed instantly in your browser</li>
+          <li>Preview events in the table and download the CSV</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. The ICS file is parsed entirely in your browser — nothing is uploaded to any server.</p>
+        <h2 class="text-xl font-black pt-4">ICS vs CSV — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">ICS</th><th class="px-4 py-3 font-black">CSV</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Format</td><td class="px-4 py-3">iCalendar (RFC 5545)</td><td class="px-4 py-3">Plain text (RFC 4180)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Data types</td><td class="px-4 py-3">Events, todos, journals</td><td class="px-4 py-3">Rows and columns</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Compatibility</td><td class="px-4 py-3">Calendar apps</td><td class="px-4 py-3">Spreadsheets, databases</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Editing</td><td class="px-4 py-3">Requires calendar app</td><td class="px-4 py-3">Any text editor</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Use case</td><td class="px-4 py-3">Sharing calendar data</td><td class="px-4 py-3">Data analysis, import/export</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What events are extracted?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">The converter extracts all VEVENT blocks and pulls the SUMMARY, DTSTART, DTEND, LOCATION, and DESCRIPTION fields from each event.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I edit events before downloading?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Currently not supported — the tool converts events as-is. You can edit the CSV after downloading.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Does it support recurring events?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Only individual VEVENT instances are extracted. RRULE-based recurring events are not expanded into separate rows.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    function parseIcs(icsText) {
+      const events = [];
+      const lines = icsText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+      let current = null;
+      let inEvent = false;
+      let descriptionLines = [];
+
+      for (const line of lines) {
+        if (line === 'BEGIN:VEVENT') {
+          inEvent = true;
+          current = { summary: '', dtstart: '', dtend: '', location: '', description: '' };
+          descriptionLines = [];
+        } else if (line === 'END:VEVENT') {
+          inEvent = false;
+          if (current) {
+            current.description = descriptionLines.join('\\n').replace(/\\,/g, ',').replace(/\\n/g, '\n');
+            events.push(current);
+          }
+          current = null;
+        } else if (inEvent && current) {
+          if (line.startsWith(' ') || line.startsWith('\t')) {
+            continue;
+          }
+          const colonIdx = line.indexOf(':');
+          if (colonIdx === -1) continue;
+          const key = line.substring(0, colonIdx);
+          const val = line.substring(colonIdx + 1);
+
+          if (key === 'SUMMARY') current.summary = val;
+          else if (key === 'DTSTART') current.dtstart = formatIcsDate(val);
+          else if (key === 'DTEND') current.dtend = formatIcsDate(val);
+          else if (key === 'LOCATION') current.location = val.replace(/\\,/g, ',');
+          else if (key === 'DESCRIPTION') descriptionLines = [val];
+        }
+      }
+      return events;
+    }
+
+    function formatIcsDate(val) {
+      const m = val.match(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/);
+      if (!m) return val;
+      return `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}:${m[6]}`;
+    }
+
+    function eventsToCsv(events) {
+      const header = 'Title,Start Date,End Date,Location,Description';
+      const rows = events.map(e => {
+        return [
+          csvEscape(e.summary),
+          csvEscape(e.dtstart),
+          csvEscape(e.dtend),
+          csvEscape(e.location),
+          csvEscape(e.description)
+        ].join(',');
+      });
+      return header + '\n' + rows.join('\n');
+    }
+
+    function csvEscape(val) {
+      if (!val) return '""';
+      val = val.replace(/"/g, '""');
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return '"' + val + '"';
+      }
+      return '"' + val + '"';
+    }
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const eventCountDisplay = document.getElementById('eventCountDisplay');
+    const previewSection = document.getElementById('previewSection');
+    const eventTableBody = document.getElementById('eventTableBody');
+    const previewLabel = document.getElementById('previewLabel');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let csvContent = '';
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('border-brand', 'bg-brand/5');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('border-brand', 'bg-brand/5');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('border-brand', 'bg-brand/5');
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    });
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file) handleFile(file);
+    });
+
+    function handleFile(file) {
+      fileNameDisplay.textContent = file.name;
+      fileNameDisplay.classList.remove('hidden');
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const events = parseIcs(reader.result);
+        csvContent = eventsToCsv(events);
+        eventCountDisplay.textContent = `${events.length} event${events.length !== 1 ? 's' : ''} found`;
+        eventCountDisplay.classList.remove('hidden');
+
+        eventTableBody.innerHTML = '';
+        events.forEach(e => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-4 py-3 font-bold">${escapeHtml(e.summary)}</td>
+            <td class="px-4 py-3">${escapeHtml(e.dtstart)}</td>
+            <td class="px-4 py-3">${escapeHtml(e.dtend)}</td>
+            <td class="px-4 py-3">${escapeHtml(e.location)}</td>
+          `;
+          eventTableBody.appendChild(row);
+        });
+
+        previewLabel.textContent = `Showing ${events.length} event${events.length !== 1 ? 's' : ''}`;
+        previewSection.classList.remove('hidden');
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'calendar.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

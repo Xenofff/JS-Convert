@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <title>XML to JSON Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert XML to JSON online for free. Paste XML or upload a file. 100% private — nothing leaves your browser." />
+  <link rel="canonical" href="https://jsconvert.site/xml-to-json/" />
+  <meta property="og:title" content="XML to JSON Converter" />
+  <meta property="og:description" content="Free browser-based XML to JSON conversion. Instant, private, no server." />
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/components/lucide.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">XML to JSON Converter</h1>
+      <p class="text-slate-500 dark:text-slate-400 font-medium">Convert XML to JSON instantly in your browser. Private by default — nothing is uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10">
+          <div class="space-y-4">
+            <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">XML Input</label>
+            <textarea id="xmlInput" class="w-full h-64 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand" placeholder="Paste XML here..."></textarea>
+            <label id="fileUploadLabel" class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-sm font-semibold text-slate-500 dark:text-slate-400 cursor-pointer hover:border-brand hover:text-brand transition-all">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Upload XML file</span>
+              <input type="file" id="fileInput" class="hidden" accept=".xml,text/xml" />
+            </label>
+          </div>
+          <div class="space-y-4">
+            <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">JSON Output</label>
+            <textarea id="jsonOutput" class="w-full h-64 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 font-mono text-sm resize-none focus:outline-none" readonly placeholder="JSON will appear here..."></textarea>
+            <div class="flex gap-3">
+              <button id="convertBtn" class="flex-1 bg-brand hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+                <span>Convert</span>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+              </button>
+              <button id="copyBtn" class="px-5 py-5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl font-bold transition-all" title="Copy JSON">
+                <i data-lucide="copy" class="w-5 h-5"></i>
+              </button>
+              <button id="downloadBtn" class="px-5 py-5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl font-bold transition-all" title="Download JSON">
+                <i data-lucide="download" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert XML to JSON</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Paste your XML text or click Upload to select a file</li>
+          <li>Click the Convert button</li>
+          <li>Copy or download the resulting JSON</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. All conversion happens entirely in your browser. Nothing is sent to any server — safe for sensitive data, configs, and APIs.</p>
+        <h2 class="text-xl font-black pt-4">XML vs JSON — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">XML</th><th class="px-4 py-3 font-black">JSON</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Data format</td><td class="px-4 py-3">Markup language</td><td class="px-4 py-3">Key-value pairs</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Readability</td><td class="px-4 py-3">Verbose</td><td class="px-4 py-3">Compact</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Schema</td><td class="px-4 py-3">XSD / DTD</td><td class="px-4 py-3">JSON Schema</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Comments support</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">No</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Array handling</td><td class="px-4 py-3">Repeating elements</td><td class="px-4 py-3">Native arrays</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I convert large XML files?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. The conversion runs entirely client-side, so very large files are supported as long as your browser has enough memory.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will attributes be preserved?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. XML attributes are stored under the <code>@attr</code> key in the JSON output so no data is lost.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Is the conversion lossless?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. All text content, attributes, and structure are preserved in the JSON output.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'XML to JSON' });
+
+    function xmlToJson(xml) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'application/xml');
+      const errors = doc.querySelector('parsererror');
+      if (errors) throw new Error('Invalid XML');
+
+      function nodeToObj(node) {
+        const obj = {};
+        if (node.attributes && node.attributes.length > 0) {
+          obj['@attr'] = {};
+          for (let i = 0; i < node.attributes.length; i++) {
+            const attr = node.attributes[i];
+            obj['@attr'][attr.name] = attr.value;
+          }
+        }
+        for (let i = 0; i < node.childNodes.length; i++) {
+          const child = node.childNodes[i];
+          if (child.nodeType === 1) {
+            const childObj = nodeToObj(child);
+            if (obj[child.nodeName]) {
+              if (!Array.isArray(obj[child.nodeName])) obj[child.nodeName] = [obj[child.nodeName]];
+              obj[child.nodeName].push(childObj);
+            } else {
+              obj[child.nodeName] = childObj;
+            }
+          } else if (child.nodeType === 3) {
+            const text = child.textContent.trim();
+            if (text) {
+              if (Object.keys(obj).length === 0) return text;
+              obj['#text'] = text;
+            }
+          }
+        }
+        return Object.keys(obj).length === 0 ? '' : obj;
+      }
+
+      const root = doc.documentElement;
+      const result = {};
+      result[root.nodeName] = nodeToObj(root);
+      return result;
+    }
+
+    const xmlInput = document.getElementById('xmlInput');
+    const jsonOutput = document.getElementById('jsonOutput');
+    const convertBtn = document.getElementById('convertBtn');
+    const fileInput = document.getElementById('fileInput');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    convertBtn.addEventListener('click', () => {
+      try {
+        const result = xmlToJson(xmlInput.value);
+        jsonOutput.value = JSON.stringify(result, null, 2);
+      } catch (e) {
+        jsonOutput.value = 'Error: ' + e.message;
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => { xmlInput.value = reader.result; };
+      reader.readAsText(file);
+      fileInput.value = '';
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(jsonOutput.value);
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([jsonOutput.value], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'converted.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

@@ -70,6 +70,11 @@ export function initLayout(options = {}) {
   const pdfMenu = (TOOLS.pdf || []).map(t => toolLink(t)).join('');
   const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
   const audioMenu = (TOOLS.audio || []).map(t => toolLink(t)).join('');
+  const subtitlesMenu = (TOOLS.subtitles || []).map(t => toolLink(t)).join('');
+  const fontsMenu = (TOOLS.fonts || []).map(t => toolLink(t)).join('');
+  const iconsMenu = (TOOLS.icons || []).map(t => toolLink(t)).join('');
+  const devMenu = (TOOLS.dev || []).map(t => toolLink(t)).join('');
+  const calendarMenu = (TOOLS.calendar || []).map(t => toolLink(t)).join('');
   const aiMenu = (TOOLS.ai || []).map(t => toolLink(t)).join('');
 
   const headerHtml = `
@@ -88,6 +93,11 @@ export function initLayout(options = {}) {
         ${dropdown('PDF Tools', pdfMenu)}
         ${dropdown('Data', dataMenu)}
         ${dropdown('Audio', audioMenu)}
+        ${dropdown('Subtitles', subtitlesMenu)}
+        ${dropdown('Fonts', fontsMenu)}
+        ${dropdown('Icons', iconsMenu)}
+        ${dropdown('Dev Tools', devMenu)}
+        ${dropdown('Calendar', calendarMenu)}
         ${dropdown('AI Tools', aiMenu)}
         <a href="/compress/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
           <i data-lucide="minimize-2" class="w-4 h-4 text-brand"></i>
@@ -136,6 +146,11 @@ export function initLayout(options = {}) {
             ${TOOLS.data.map(t => toolLink(t)).join('')}
             ${TOOLS.compress.map(t => toolLink(t)).join('')}
             ${(TOOLS.audio || []).map(t => toolLink(t)).join('')}
+            ${(TOOLS.subtitles || []).map(t => toolLink(t)).join('')}
+            ${(TOOLS.fonts || []).map(t => toolLink(t)).join('')}
+            ${(TOOLS.icons || []).map(t => toolLink(t)).join('')}
+            ${(TOOLS.dev || []).map(t => toolLink(t)).join('')}
+            ${(TOOLS.calendar || []).map(t => toolLink(t)).join('')}
             ${(TOOLS.utilities || []).map(t => toolLink(t)).join('')}
             ${(TOOLS.ai || []).map(t => toolLink(t)).join('')}
           </div>

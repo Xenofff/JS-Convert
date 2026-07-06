@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>SRT to VTT Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert SRT subtitle files to WebVTT format online for free. 100% private — nothing leaves your browser." />
+  <link rel="canonical" href="https://jsconvert.site/srt-to-vtt/" />
+  <meta property="og:title" content="SRT to VTT Converter" />
+  <meta property="og:description" content="Free browser-based SRT to VTT conversion. Instant, private, no server." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/components/lucide.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">SRT to VTT Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert SRT subtitles to WebVTT format instantly. Private by default — nothing leaves your browser.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-stretch">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">SRT Input</label>
+              <label class="cursor-pointer text-xs font-bold text-brand hover:underline flex items-center gap-1">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i> Load file
+                <input type="file" id="fileInput" class="hidden" accept=".srt" />
+              </label>
+            </div>
+            <textarea id="srtInput" class="w-full h-64 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-mono font-bold text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand" placeholder="Paste your SRT content here...&#10;&#10;1&#10;00:00:20,000 --> 00:00:24,400&#10;Hello, welcome to the video.&#10;&#10;2&#10;00:00:25,100 --> 00:00:28,300&#10;This is a subtitle example."></textarea>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">VTT Output</label>
+              <div class="flex gap-2">
+                <button id="copyBtn" class="text-xs font-bold text-slate-400 hover:text-brand flex items-center gap-1 transition-colors" disabled>
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                </button>
+                <button id="downloadBtn" class="text-xs font-bold text-slate-400 hover:text-brand flex items-center gap-1 transition-colors" disabled>
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i> Download
+                </button>
+              </div>
+            </div>
+            <textarea id="vttOutput" class="w-full h-64 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-mono font-bold text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand" readonly placeholder="VTT output will appear here..."></textarea>
+          </div>
+        </div>
+
+        <button id="convertBtn" class="mt-8 w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+          <span>Convert to VTT</span>
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert SRT to VTT</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Paste your SRT subtitle text into the input field, or click "Load file" to upload a .srt file</li>
+          <li>Click <strong>Convert to VTT</strong> — the conversion happens instantly in your browser</li>
+          <li>Copy the VTT output or click Download to save it as a .vtt file</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Your subtitle files never leave your browser. All conversion happens locally using JavaScript — no server upload, no data collection.</p>
+        <h2 class="text-xl font-black pt-4">SRT vs VTT — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">SRT</th><th class="px-4 py-3 font-black">VTT</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Format</td><td class="px-4 py-3">Plain text, no header</td><td class="px-4 py-3">Requires WEBVTT header</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Timestamp format</td><td class="px-4 py-3">00:00:20,000</td><td class="px-4 py-3">00:00:20.000</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Styling support</td><td class="px-4 py-3">Basic (bold, italic)</td><td class="px-4 py-3">CSS styling, positioning</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Metadata</td><td class="px-4 py-3">None</td><td class="px-4 py-3">NOTE blocks supported</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Browser support</td><td class="px-4 py-3">Indirect (via players)</td><td class="px-4 py-3">Native HTML5 &lt;track&gt;</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What is the difference between SRT and VTT?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">SRT is a simpler subtitle format without a header file, while VTT (WebVTT) requires a WEBVTT header, uses dots instead of commas in timestamps, and supports CSS styling and positioning cues.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will special characters be preserved?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. This is a pure text conversion — all characters, including Unicode and special symbols, are preserved exactly as they appear in the original SRT file.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I convert multiple SRT files at once?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Currently you can convert one file at a time. Paste each SRT file separately and convert them individually. For batch conversion, repeat the process for each file.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'SRT to VTT Converter' });
+
+    const srtInput = document.getElementById('srtInput');
+    const vttOutput = document.getElementById('vttOutput');
+    const convertBtn = document.getElementById('convertBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const fileInput = document.getElementById('fileInput');
+
+    function srtToVtt(srt) {
+      let text = srt.replace(/^\uFEFF/, '');
+      text = text.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+      return 'WEBVTT\n\n' + text.trim() + '\n';
+    }
+
+    convertBtn.addEventListener('click', () => {
+      const srt = srtInput.value.trim();
+      if (!srt) return;
+      const vtt = srtToVtt(srt);
+      vttOutput.value = vtt;
+      copyBtn.disabled = false;
+      downloadBtn.disabled = false;
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(vttOutput.value).then(() => {
+        copyBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Copied!';
+        lucide.createIcons();
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy';
+          lucide.createIcons();
+        }, 1500);
+      });
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([vttOutput.value], { type: 'text/vtt' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'converted.vtt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        srtInput.value = reader.result;
+      };
+      reader.readAsText(file);
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>PNG to ICO Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert PNG images to ICO (favicon) files online for free. Choose icon sizes. 100% private — nothing leaves your browser." />
+  <link rel="canonical" href="https://jsconvert.site/png-to-ico/" />
+  <meta property="og:title" content="PNG to ICO Converter" />
+  <meta property="og:description" content="Free browser-based PNG to ICO conversion. Create favicons from any image." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/components/lucide.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">PNG to ICO Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert PNG images to ICO (favicon) files instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" accept=".png,image/png" />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop a PNG file here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-3">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Icon Sizes</label>
+              <div class="grid grid-cols-2 gap-2" id="sizeCheckboxes">
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="16" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">16x16</span>
+                </label>
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="32" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">32x32</span>
+                </label>
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="48" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">48x48</span>
+                </label>
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="64" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">64x64</span>
+                </label>
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="128" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">128x128</span>
+                </label>
+                <label class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 cursor-pointer hover:border-brand transition-colors">
+                  <input type="checkbox" value="256" class="size-check accent-brand w-4 h-4" checked />
+                  <span class="text-sm font-bold">256x256</span>
+                </label>
+              </div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert to ICO</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">How to convert PNG to ICO</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Upload a PNG image via drag &amp; drop or click</li>
+          <li>Select the icon sizes you want included in the ICO</li>
+          <li>Click Convert to ICO and save the file to your device</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">Yes. Your PNG never leaves your browser. No upload, no server — everything is processed locally in your browser.</p>
+        <h2 class="text-xl font-black pt-4">PNG vs ICO — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">PNG</th><th class="px-4 py-3 font-black">ICO</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">Full alpha</td><td class="px-4 py-3">Full alpha (PNG-based)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Multi-size</td><td class="px-4 py-3">Single size</td><td class="px-4 py-3">Multiple sizes in one file</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Use case</td><td class="px-4 py-3">Web, apps, editing</td><td class="px-4 py-3">Favicons, desktop icons</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Browser support</td><td class="px-4 py-3">Universal</td><td class="px-4 py-3">Universal</td></tr>
+              <tr><td class="px-4 py-3 font-bold">File size</td><td class="px-4 py-3">Smaller (single image)</td><td class="px-4 py-3">Larger (bundles multiple sizes)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">What sizes should I include?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Use 16x16 for browser tabs, 32x32 for desktop shortcuts, 48x48 for Windows file explorer, and 256x256 for high-DPI displays. Including all sizes ensures your favicon looks crisp everywhere.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Can I use this as a favicon?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. Save the .ico file as favicon.ico in your website root directory. Then add a link tag in your HTML head: &lt;link rel="icon" href="/favicon.ico"&gt;.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Does it support transparent PNGs?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes. Alpha transparency from your PNG is fully preserved in the ICO file. Your favicon will display with transparent backgrounds in all supported browsers.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+
+    initLayout({ pageTitle: 'PNG to ICO Converter' });
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const filesList = document.getElementById('filesList');
+    const fileCountDisplay = document.getElementById('fileCountDisplay');
+    const convertBtn = document.getElementById('convertBtn');
+    const progressInner = document.getElementById('progressInner');
+    const conversionStatus = document.getElementById('conversionStatus');
+
+    let selectedFile = null;
+    let dragCounter = 0;
+
+    function setDropActive(active) {
+      const iconWrap = document.getElementById('dropzoneIconWrap');
+      if (active) {
+        dropzone.classList.add('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        iconWrap?.classList.add('text-brand', 'animate-bounce');
+      } else {
+        dropzone.classList.remove('scale-[1.02]', 'shadow-xl', 'shadow-indigo-500/10', 'border-brand', 'bg-brand/5');
+        iconWrap?.classList.remove('text-brand', 'animate-bounce');
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (!bytes) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+    }
+
+    function renderList() {
+      if (!selectedFile) {
+        filesList.classList.add('hidden');
+        fileCountDisplay.classList.add('hidden');
+        filesList.innerHTML = '';
+        return;
+      }
+
+      filesList.classList.remove('hidden');
+      fileCountDisplay.classList.remove('hidden');
+      fileCountDisplay.textContent = selectedFile.name;
+
+      filesList.innerHTML = '';
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between text-xs bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5';
+
+      const left = document.createElement('div');
+      left.className = 'flex items-center gap-2 flex-1 min-w-0';
+
+      const fileIcon = document.createElement('i');
+      fileIcon.setAttribute('data-lucide', 'file-image');
+      fileIcon.className = 'w-3 h-3 text-slate-500 flex-shrink-0';
+
+      const fileName = document.createElement('span');
+      fileName.className = 'truncate text-slate-700 dark:text-slate-300';
+      fileName.textContent = selectedFile.name;
+
+      const fileSize = document.createElement('span');
+      fileSize.className = 'text-slate-400 flex-shrink-0 ml-2';
+      fileSize.textContent = formatFileSize(selectedFile.size);
+
+      left.appendChild(fileIcon);
+      left.appendChild(fileName);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'ml-2 p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors flex-shrink-0';
+      removeBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+      removeBtn.onclick = (e) => {
+        e.stopPropagation();
+        selectedFile = null;
+        renderList();
+        window.lucide?.createIcons?.();
+      };
+
+      row.appendChild(left);
+      row.appendChild(fileSize);
+      row.appendChild(removeBtn);
+      filesList.appendChild(row);
+
+      window.lucide?.createIcons?.();
+    }
+
+    function addFile(file) {
+      if (!file.type.match(/image\/png/)) {
+        alert('Please select a PNG file');
+        return;
+      }
+      selectedFile = file;
+      renderList();
+    }
+
+    function getSelectedSizes() {
+      const checks = document.querySelectorAll('.size-check');
+      const sizes = [];
+      checks.forEach(c => { if (c.checked) sizes.push(Number(c.value)); });
+      return sizes.sort((a, b) => a - b);
+    }
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function loadImage(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
+    async function pngToIco(file) {
+      const sizes = getSelectedSizes();
+      if (sizes.length === 0) throw new Error('Select at least one icon size');
+
+      const img = await loadImage(file);
+
+      const pngBuffers = [];
+      for (const size of sizes) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size, size);
+        const pngBlob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+        const arrayBuffer = await pngBlob.arrayBuffer();
+        pngBuffers.push({ size, data: new Uint8Array(arrayBuffer) });
+      }
+
+      const numImages = pngBuffers.length;
+      const headerSize = 6;
+      const dirSize = numImages * 16;
+      const dataSize = pngBuffers.reduce((sum, b) => sum + b.data.length, 0);
+      const buffer = new ArrayBuffer(headerSize + dirSize + dataSize);
+      const view = new DataView(buffer);
+      const bytes = new Uint8Array(buffer);
+
+      view.setUint16(0, 0, true);
+      view.setUint16(2, 1, true);
+      view.setUint16(4, numImages, true);
+
+      let dataOffset = headerSize + dirSize;
+
+      for (let i = 0; i < numImages; i++) {
+        const { size, data } = pngBuffers[i];
+        const offset = headerSize + i * 16;
+        view.setUint8(offset, size === 256 ? 0 : size);
+        view.setUint8(offset + 1, size === 256 ? 0 : size);
+        view.setUint8(offset + 2, 0);
+        view.setUint8(offset + 3, 0);
+        view.setUint16(offset + 4, 1, true);
+        view.setUint16(offset + 6, 32, true);
+        view.setUint32(offset + 8, data.length, true);
+        view.setUint32(offset + 12, dataOffset, true);
+
+        bytes.set(data, dataOffset);
+        dataOffset += data.length;
+      }
+
+      return new Blob([buffer], { type: 'image/x-icon' });
+    }
+
+    dropzone.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      fileInput?.click();
+    });
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) addFile(file);
+      fileInput.value = '';
+    });
+
+    dropzone.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      dragCounter++;
+      if (dragCounter === 1) setDropActive(true);
+    });
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+    dropzone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter <= 0) { dragCounter = 0; setDropActive(false); }
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      setDropActive(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (file) addFile(file);
+    });
+
+    convertBtn.addEventListener('click', async () => {
+      if (!selectedFile) {
+        alert('Please select a PNG file');
+        return;
+      }
+
+      const sizes = getSelectedSizes();
+      if (sizes.length === 0) {
+        alert('Select at least one icon size');
+        return;
+      }
+
+      convertBtn.disabled = true;
+      conversionStatus.classList.remove('hidden');
+      conversionStatus.textContent = 'Converting...';
+      progressInner.style.width = '0%';
+
+      try {
+        progressInner.style.width = '30%';
+        const icoBlob = await pngToIco(selectedFile);
+        progressInner.style.width = '90%';
+
+        const baseName = selectedFile.name.replace(/\.png$/i, '');
+        downloadBlob(icoBlob, `${baseName}.ico`);
+
+        progressInner.style.width = '100%';
+        conversionStatus.textContent = 'Done!';
+      } catch (err) {
+        console.error(err);
+        conversionStatus.textContent = 'Error: ' + err.message;
+      }
+
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        progressInner.style.width = '0%';
+        conversionStatus.classList.add('hidden');
+      }, 2000);
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>
