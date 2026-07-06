@@ -68,14 +68,29 @@ export function initLayout(options = {}) {
   const imagesMenu = TOOLS.images.map(t => toolLink(t)).join('');
   const docsMenu = TOOLS.documents.map(t => toolLink(t)).join('');
   const pdfMenu = (TOOLS.pdf || []).map(t => toolLink(t)).join('');
-  const dataMenu = TOOLS.data.map(t => toolLink(t)).join('');
   const audioMenu = (TOOLS.audio || []).map(t => toolLink(t)).join('');
-  const subtitlesMenu = (TOOLS.subtitles || []).map(t => toolLink(t)).join('');
-  const fontsMenu = (TOOLS.fonts || []).map(t => toolLink(t)).join('');
-  const iconsMenu = (TOOLS.icons || []).map(t => toolLink(t)).join('');
-  const devMenu = (TOOLS.dev || []).map(t => toolLink(t)).join('');
-  const calendarMenu = (TOOLS.calendar || []).map(t => toolLink(t)).join('');
-  const aiMenu = (TOOLS.ai || []).map(t => toolLink(t)).join('');
+
+  const moreToolCategories = [
+    { label: 'Data', items: TOOLS.data },
+    { label: 'Subtitles & Fonts', items: [...(TOOLS.subtitles || []), ...(TOOLS.fonts || [])] },
+    { label: 'Icons, Calendar & AI', items: [...(TOOLS.icons || []), ...(TOOLS.calendar || []), ...(TOOLS.utilities || []), ...(TOOLS.ai || [])] }
+  ];
+
+  const moreToolsMenuHtml = `
+    <div class="absolute top-full right-0 mt-2 w-[640px] max-md:w-[calc(100vw-3rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 grid grid-cols-3 max-md:grid-cols-1 gap-6 hidden" id="moreToolsMenu">
+      ${moreToolCategories.map(cat => `
+        <div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">${cat.label}</div>
+          ${cat.items.map(t => `
+            <a href="${t.href}" class="flex items-center gap-2 py-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand transition-colors">
+              <i data-lucide="${t.icon}" class="w-3.5 h-3.5 text-brand flex-shrink-0"></i>
+              ${t.title}
+            </a>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>
+  `;
 
   const headerHtml = `
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
@@ -91,18 +106,18 @@ export function initLayout(options = {}) {
         ${dropdown('Images', imagesMenu)}
         ${dropdown('Documents', docsMenu)}
         ${dropdown('PDF Tools', pdfMenu)}
-        ${dropdown('Data', dataMenu)}
         ${dropdown('Audio', audioMenu)}
-        ${dropdown('Subtitles', subtitlesMenu)}
-        ${dropdown('Fonts', fontsMenu)}
-        ${dropdown('Icons', iconsMenu)}
-        ${dropdown('Dev Tools', devMenu)}
-        ${dropdown('Calendar', calendarMenu)}
-        ${dropdown('AI Tools', aiMenu)}
         <a href="/compress/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
           <i data-lucide="minimize-2" class="w-4 h-4 text-brand"></i>
           <span class="text-slate-700 dark:text-slate-100">Compress</span>
         </a>
+        <div class="relative" id="moreToolsWrapper">
+          <button type="button" id="moreToolsBtn" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
+            <span class="text-slate-700 dark:text-slate-100">More Tools</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-colors"></i>
+          </button>
+          ${moreToolsMenuHtml}
+        </div>
         <a href="/blog/" class="h-10 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand transition-all text-xs font-black uppercase tracking-widest shadow-sm flex items-center gap-2">
           <i data-lucide="book-open" class="w-4 h-4 text-brand"></i>
           <span class="text-slate-700 dark:text-slate-100">Blog</span>
@@ -184,6 +199,23 @@ export function initLayout(options = {}) {
     document.body.appendChild(footer);
 
     bindThemeToggle();
+
+    const moreToolsBtn = document.getElementById('moreToolsBtn');
+    const moreToolsMenu = document.getElementById('moreToolsMenu');
+    if (moreToolsBtn && moreToolsMenu) {
+      moreToolsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !moreToolsMenu.classList.contains('hidden');
+        moreToolsMenu.classList.toggle('hidden', isOpen);
+        moreToolsBtn.querySelector('[data-lucide="chevron-down"]')?.classList.toggle('rotate-180', !isOpen);
+      });
+      document.addEventListener('click', (e) => {
+        if (!moreToolsMenu.contains(e.target) && !moreToolsBtn.contains(e.target)) {
+          moreToolsMenu.classList.add('hidden');
+          moreToolsBtn.querySelector('[data-lucide="chevron-down"]')?.classList.remove('rotate-180');
+        }
+      });
+    }
 
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
       window.lucide.createIcons();

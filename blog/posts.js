@@ -70,5 +70,77 @@ export const POSTS = [
     category: 'Audio',
     readTime: '4 min',
     tool: '/m4a-to-mp3/'
+  },
+  {
+    slug: 'srt-vs-vtt',
+    title: 'SRT vs VTT: Subtitle Format Differences Explained',
+    description: 'Compare SRT and VTT subtitle formats and learn which one your project needs.',
+    date: '2025-07-01',
+    category: 'Subtitles',
+    readTime: '4 min',
+    tool: '/srt-to-vtt/'
+  },
+  {
+    slug: 'add-subtitles-to-website-video',
+    title: 'How to Add Subtitles to HTML5 Video (Step-by-Step)',
+    description: 'Learn how to add VTT subtitles to your HTML5 video player with code examples.',
+    date: '2025-07-03',
+    category: 'Subtitles',
+    readTime: '4 min',
+    tool: '/srt-to-vtt/'
+  },
+  {
+    slug: 'woff2-vs-ttf',
+    title: 'WOFF2 vs TTF: Which Font Format Should Your Website Use?',
+    description: 'Compare font formats for web performance — file size, browser support, and best practices.',
+    date: '2025-07-05',
+    category: 'Fonts',
+    readTime: '4 min',
+    tool: '/ttf-to-woff2/'
+  },
+  {
+    slug: 'favicon-generator-guide',
+    title: 'How to Create a Favicon.ico From Any PNG Image',
+    description: 'Step-by-step guide to creating a multi-size favicon.ico for your website.',
+    date: '2025-07-08',
+    category: 'Icons',
+    readTime: '4 min',
+    tool: '/png-to-ico/'
+  },
+  {
+    slug: 'json-to-xml-guide',
+    title: 'Converting JSON to XML: When and Why You\'d Need It',
+    description: 'Understand the structural differences between JSON and XML and when conversion makes sense.',
+    date: '2025-07-10',
+    category: 'Developer Tools',
+    readTime: '5 min',
+    tool: '/json-to-xml/'
+  },
+  {
+    slug: 'hex-rgb-hsl-explained',
+    title: 'HEX, RGB, HSL, CMYK: Color Formats Explained for Designers',
+    description: 'A practical guide to the four main color formats and when to use each one.',
+    date: '2025-07-12',
+    category: 'Developer Tools',
+    readTime: '5 min',
+    tool: '/color-converter/'
+  },
+  {
+    slug: 'export-calendar-events-to-excel',
+    title: 'How to Export Calendar Events (.ics) to Excel or CSV',
+    description: 'Convert .ics calendar files to CSV for analysis in Excel or Google Sheets.',
+    date: '2025-07-15',
+    category: 'Calendar',
+    readTime: '4 min',
+    tool: '/ics-to-csv/'
+  },
+  {
+    slug: 'ico-file-format-explained',
+    title: 'What Is an ICO File and How Do You Open One?',
+    description: 'Everything about the ICO file format — what it is, how to open it, and how to convert it.',
+    date: '2025-07-18',
+    category: 'Icons',
+    readTime: '3 min',
+    tool: '/ico-to-png/'
   }
 ];

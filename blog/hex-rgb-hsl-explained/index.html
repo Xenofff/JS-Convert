@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>HEX, RGB, HSL, CMYK: Color Formats Explained for Designers | JS-Convert</title>
+  <meta name="description" content="A practical guide to the four main color formats and when to use each one." />
+  <link rel="canonical" href="https://jsconvert.site/blog/hex-rgb-hsl-explained/" />
+  <meta property="og:title" content="HEX, RGB, HSL, CMYK: Color Formats Explained for Designers" />
+  <meta property="og:description" content="A practical guide to the four main color formats and when to use each one." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Developer Tools</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">HEX, RGB, HSL, CMYK: Color Formats Explained for Designers</h1>
+        <p class="text-slate-500">Published: July 12, 2025 · 5 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>The same color specified incorrectly in different formats can cost a designer hours of debugging. Understanding HEX, RGB, HSL, and CMYK is essential for any web developer or designer.</p>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">HEX — the web standard</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Six-digit hexadecimal code (#RRGGBB).</li>
+          <li>Each pair represents red, green, blue intensity (00-FF).</li>
+          <li>Short form: #RGB expands to #RRGGBB.</li>
+          <li>Most common format in CSS and HTML.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">RGB — how screens see color</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Three channels, each 0-255 (rgb(79, 70, 229)).</li>
+          <li>Directly maps to how screens emit light.</li>
+          <li>Intuitive for developers working with programmatic color manipulation.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">HSL — how humans think about color</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Hue (0-360 color wheel), Saturation (0-100% intensity), Lightness (0-100% brightness).</li>
+          <li>Best for creating color palettes, generating shades/tints, and design systems.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">CMYK — for print, not screens</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Cyan, Magenta, Yellow, Key (black).</li>
+          <li>Subtractive model for printed materials.</li>
+          <li>Cannot be used directly in CSS — must convert to RGB/HEX for web use.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Quick conversion reference</h2>
+        <p>Here's the brand indigo color in all four formats:</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800">
+              <tr><th class="px-4 py-3 font-black">Format</th><th class="px-4 py-3 font-black">Value</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">HEX</td><td class="px-4 py-3">#4f46e5</td></tr>
+              <tr><td class="px-4 py-3 font-bold">RGB</td><td class="px-4 py-3">rgb(79, 70, 229)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">HSL</td><td class="px-4 py-3">hsl(239, 67%, 59%)</td></tr>
+              <tr><td class="px-4 py-3 font-bold">CMYK</td><td class="px-4 py-3">cmyk(65%, 69%, 0%, 10%)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CTA single link -->
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/color-converter/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Convert Colors Now <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

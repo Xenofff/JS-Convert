@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>How to Create a Favicon.ico From Any PNG Image | JS-Convert</title>
+  <meta name="description" content="Step-by-step guide to creating a multi-size favicon.ico for your website." />
+  <link rel="canonical" href="https://jsconvert.site/blog/favicon-generator-guide/" />
+  <meta property="og:title" content="How to Create a Favicon.ico From Any PNG Image" />
+  <meta property="og:description" content="Step-by-step guide to creating a multi-size favicon.ico for your website." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Icons</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">How to Create a Favicon.ico From Any PNG Image</h1>
+        <p class="text-slate-500">Published: July 8, 2025 · 4 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>A favicon is a small detail that has a big impact on branding and tab recognition. Most websites use a .ico file containing multiple sizes of the same icon.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">What sizes do you actually need?</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>16×16</strong> — Browser tab</li>
+          <li><strong>32×32</strong> — Windows taskbar, Mac Dock</li>
+          <li><strong>48×48</strong> — Windows file explorer, shortcuts</li>
+          <li><strong>256×256</strong> — High-DPI displays, Windows tiles</li>
+        </ul>
+        <p>Most .ico files bundle several sizes together so browsers and operating systems can pick the best one.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Step-by-step: PNG to ICO</h2>
+        <ol class="list-decimal list-inside space-y-2">
+          <li>Prepare a square PNG image (ideally 256×256 or larger).</li>
+          <li>Open a browser-based PNG to ICO converter.</li>
+          <li>Upload your PNG.</li>
+          <li>Select which sizes to include.</li>
+          <li>Click Convert and download the .ico file.</li>
+        </ol>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Where to put favicon.ico</h2>
+        <pre><code class="block bg-slate-900 dark:bg-slate-950 text-slate-100 rounded-xl p-4 text-sm overflow-x-auto">&lt;link rel="icon" type="image/x-icon" href="/favicon.ico"&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"&gt;</code></pre>
+        <p>Place the file in your website's root directory.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Design tips</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Keep it simple — favicons are tiny.</li>
+          <li>Use bold shapes and high contrast.</li>
+          <li>Avoid thin lines and small text.</li>
+          <li>Test on both light and dark browser chrome.</li>
+          <li>Create a transparent PNG first then convert to .ico.</li>
+        </ul>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/png-to-ico/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Create Favicon from PNG <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

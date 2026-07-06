@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>How to Export Calendar Events (.ics) to Excel or CSV | JS-Convert</title>
+  <meta name="description" content="Convert .ics calendar files to CSV for analysis in Excel or Google Sheets." />
+  <link rel="canonical" href="https://jsconvert.site/blog/export-calendar-events-to-excel/" />
+  <meta property="og:title" content="How to Export Calendar Events (.ics) to Excel or CSV" />
+  <meta property="og:description" content="Convert .ics calendar files to CSV for analysis in Excel or Google Sheets." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Calendar</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">How to Export Calendar Events (.ics) to Excel or CSV</h1>
+        <p class="text-slate-500">Published: July 15, 2025 · 4 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>Whether you need to audit your meeting schedule, analyze time allocation, or create a backup of your calendar data, exporting to CSV gives you full control over your events in spreadsheet software.</p>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">What is an .ics file?</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>iCalendar format.</li>
+          <li>Standard used by Google Calendar, Outlook, Apple Calendar, and virtually all calendar applications.</li>
+          <li>Contains events with titles, times, locations, and descriptions.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Why convert to CSV?</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Open in Excel or Google Sheets for analysis.</li>
+          <li>Count meetings per week/month.</li>
+          <li>Filter and sort events.</li>
+          <li>Create time tracking reports.</li>
+          <li>Share calendar data with people who don't use your calendar app.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Step-by-step guide</h2>
+        <ol class="list-decimal list-inside space-y-2">
+          <li>Export .ics from your calendar app (Google: Settings → Import/Export → Export; Outlook: File → Save As → iCalendar; Apple: File → Export).</li>
+          <li>Open a browser-based ICS to CSV converter.</li>
+          <li>Drag your .ics file into the converter.</li>
+          <li>Preview extracted events.</li>
+          <li>Download the CSV file.</li>
+        </ol>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">What data gets extracted</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Event title (SUMMARY)</li>
+          <li>Start date/time (DTSTART)</li>
+          <li>End date/time (DTEND)</li>
+          <li>Location (LOCATION)</li>
+          <li>Description (DESCRIPTION)</li>
+        </ul>
+
+        <!-- CTA single link -->
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/ics-to-csv/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Convert ICS to CSV <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

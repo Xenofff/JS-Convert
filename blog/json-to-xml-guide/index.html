@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>Converting JSON to XML: When and Why You'd Need It | JS-Convert</title>
+  <meta name="description" content="Understand the structural differences between JSON and XML and when conversion makes sense." />
+  <link rel="canonical" href="https://jsconvert.site/blog/json-to-xml-guide/" />
+  <meta property="og:title" content="Converting JSON to XML: When and Why You'd Need It" />
+  <meta property="og:description" content="Understand the structural differences between JSON and XML and when conversion makes sense." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Developer Tools</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">Converting JSON to XML: When and Why You'd Need It</h1>
+        <p class="text-slate-500">Published: July 10, 2025 · 5 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>JSON dominates modern APIs, but XML is still widely used in enterprise systems, SOAP APIs, RSS feeds, and many legacy platforms. Understanding when and how to convert between them is a valuable skill.</p>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Why would you convert JSON to XML?</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Integration with legacy enterprise systems that only accept XML.</li>
+          <li>Generating RSS/Atom feeds from JSON data.</li>
+          <li>Consuming SOAP APIs that require XML payloads.</li>
+          <li>Some configuration formats (Maven, Android manifests) use XML.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Structural differences</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800">
+              <tr><th class="px-4 py-3 font-black">Aspect</th><th class="px-4 py-3 font-black">JSON</th><th class="px-4 py-3 font-black">XML</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Attributes vs Properties</td><td class="px-4 py-3">Key-value only</td><td class="px-4 py-3">Attributes + elements</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Arrays</td><td class="px-4 py-3">Native</td><td class="px-4 py-3">Repeated elements</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Root element</td><td class="px-4 py-3">Optional</td><td class="px-4 py-3">Required</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Readability</td><td class="px-4 py-3">Compact</td><td class="px-4 py-3">Verbose but self-documenting</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Common conversion pitfalls</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>JSON arrays don't have a direct XML equivalent — use repeated tags.</li>
+          <li>Null values need special handling (empty element vs omitting).</li>
+          <li>XML requires escaping special characters (&, &lt;, &gt;).</li>
+          <li>XML tag names can't start with numbers.</li>
+        </ul>
+
+        <h2 class="text-2xl font-black mt-10 mb-4">Try it yourself</h2>
+        <p>Use a browser-based converter to transform JSON to XML instantly. No server upload needed — conversion happens locally.</p>
+
+        <!-- CTA two-link -->
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <div class="flex flex-wrap gap-3 justify-center">
+            <a href="/json-to-xml/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+              Convert JSON to XML <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="/xml-to-json/" class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold px-6 py-3 rounded-2xl hover:border-brand transition-colors">
+              Convert XML to JSON <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

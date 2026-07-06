@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>SRT vs VTT: Subtitle Format Differences Explained | JS-Convert</title>
+  <meta name="description" content="Compare SRT and VTT subtitle formats and learn which one your project needs." />
+  <link rel="canonical" href="https://jsconvert.site/blog/srt-vs-vtt/" />
+  <meta property="og:title" content="SRT vs VTT: Subtitle Format Differences Explained" />
+  <meta property="og:description" content="Compare SRT and VTT subtitle formats and learn which one your project needs." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Subtitles</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">SRT vs VTT: Subtitle Format Differences Explained</h1>
+        <p class="text-slate-500">Published: July 1, 2025 · 4 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>SRT and VTT are the two most common subtitle formats. Video editors, content creators, and web developers often confuse which one to use, leading to compatibility issues. Understanding the differences between them will save you time and frustration when working on video projects.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">What is SRT?</h2>
+        <p>SubRip Subtitle (SRT) is a plain text format that uses sequence numbers, timestamps in the format <code>HH:MM:SS,mmm</code>, and the subtitle text. It is supported by virtually every video player including YouTube, VLC, and desktop editing software. SRT is simple, universal, and has been the de facto standard for years.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">What is VTT?</h2>
+        <p>WebVTT (Web Video Text Tracks) is a W3C standard designed for HTML5. It uses a dot instead of a comma in timestamps (<code>HH:MM:SS.mmm</code>), supports styling such as bold, italic, and color, allows positioning cues, and includes metadata via NOTE blocks. VTT is required for the HTML5 <code>&lt;track&gt;</code> element.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Key differences</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">SRT</th><th class="px-4 py-3 font-black">VTT</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Timestamp format</td><td class="px-4 py-3">Comma — <code>00:00:20,000</code></td><td class="px-4 py-3">Dot — <code>00:00:20.000</code></td></tr>
+              <tr><td class="px-4 py-3 font-bold">Styling support</td><td class="px-4 py-3">None</td><td class="px-4 py-3">Basic CSS-like</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Browser / HTML5 support</td><td class="px-4 py-3">Needs conversion</td><td class="px-4 py-3">Native</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Common use case</td><td class="px-4 py-3">Desktop, YouTube</td><td class="px-4 py-3">Web players</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Which one do you need?</h2>
+        <p>If you are uploading to YouTube or using desktop video players, SRT works perfectly. If you are building a website with HTML5 video, you need VTT. Most projects benefit from having both formats available so you are prepared for any platform.</p>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <div class="flex flex-wrap gap-3 justify-center">
+            <a href="/srt-to-vtt/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+              Convert SRT to VTT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="/vtt-to-srt/" class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold px-6 py-3 rounded-2xl hover:border-brand transition-colors">
+              Convert VTT to SRT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

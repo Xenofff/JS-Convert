@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>WOFF2 vs TTF: Which Font Format Should Your Website Use? | JS-Convert</title>
+  <meta name="description" content="Compare font formats for web performance — file size, browser support, and best practices." />
+  <link rel="canonical" href="https://jsconvert.site/blog/woff2-vs-ttf/" />
+  <meta property="og:title" content="WOFF2 vs TTF: Which Font Format Should Your Website Use?" />
+  <meta property="og:description" content="Compare font formats for web performance — file size, browser support, and best practices." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Fonts</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">WOFF2 vs TTF: Which Font Format Should Your Website Use?</h1>
+        <p class="text-slate-500">Published: July 5, 2025 · 4 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>The font format you choose directly impacts your website's loading speed. WOFF2 and TTF are the most common choices, but they serve different purposes.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">What is TTF?</h2>
+        <p>TrueType Font (TTF) was developed by Apple and Microsoft in the 1980s. It has universal support across all operating systems and design software. TTF is used for desktop installation, print, and design tools. It has larger file sizes since there is no web-specific compression.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">What is WOFF2?</h2>
+        <p>Web Open Font Format 2 (WOFF2) uses Brotli compression to reduce file sizes by 30–50% compared to WOFF (and even more compared to TTF). It was created specifically for web use and is supported by all modern browsers including Chrome, Firefox, Safari, and Edge.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Performance comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800"><tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">TTF</th><th class="px-4 py-3 font-black">WOFF2</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">File size</td><td class="px-4 py-3">Larger</td><td class="px-4 py-3">30–50% smaller</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Browser support</td><td class="px-4 py-3">Universal but not optimized</td><td class="px-4 py-3">All modern browsers</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Compression</td><td class="px-4 py-3">None</td><td class="px-4 py-3">Brotli</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">Desktop, print</td><td class="px-4 py-3">Web projects</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">How to convert TTF to WOFF2 for your website</h2>
+        <p>Use a browser-based converter to upload your TTF and download the WOFF2. Then use <code>@font-face</code> in CSS with <code>format('woff2')</code> to load it on your site.</p>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/ttf-to-woff2/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Convert TTF to WOFF2 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>

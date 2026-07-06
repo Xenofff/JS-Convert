@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>How to Add Subtitles to HTML5 Video (Step-by-Step) | JS-Convert</title>
+  <meta name="description" content="Learn how to add VTT subtitles to your HTML5 video player with code examples." />
+  <link rel="canonical" href="https://jsconvert.site/blog/add-subtitles-to-website-video/" />
+  <meta property="og:title" content="How to Add Subtitles to HTML5 Video (Step-by-Step)" />
+  <meta property="og:description" content="Learn how to add VTT subtitles to your HTML5 video player with code examples." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-3xl mx-auto px-6 py-14">
+    <article>
+      <div class="mb-8">
+        <span class="text-xs font-black uppercase tracking-widest text-brand">Subtitles</span>
+        <h1 class="text-4xl font-black mt-2 mb-4">How to Add Subtitles to HTML5 Video (Step-by-Step)</h1>
+        <p class="text-slate-500">Published: July 3, 2025 · 4 min read</p>
+      </div>
+
+      <div class="prose space-y-6 text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+        <p>Adding subtitles to your website video improves accessibility, boosts SEO, and reaches international audiences. HTML5 video supports subtitles natively, but only in WebVTT format.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Why HTML5 video needs VTT</h2>
+        <p>The HTML5 <code>&lt;track&gt;</code> element requires WebVTT format. SRT files will not work directly — you need to convert them first.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Step 1: Convert your SRT file</h2>
+        <p>Use a browser-based converter to transform SRT to VTT. No software installation needed.</p>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Step 2: Add the track element</h2>
+        <p>Add a <code>&lt;track&gt;</code> element inside your <code>&lt;video&gt;</code> tag pointing to the VTT file:</p>
+        <pre><code class="block bg-slate-900 dark:bg-slate-950 text-slate-100 rounded-xl p-4 text-sm overflow-x-auto">&lt;video controls&gt;
+  &lt;source src="video.mp4" type="video/mp4"&gt;
+  &lt;track kind="subtitles" src="subtitles.vtt" srclang="en" label="English"&gt;
+&lt;/video&gt;</code></pre>
+
+        <h2 class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-10 mb-4">Common mistakes</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Forgetting the <code>srclang</code> attribute — browsers need it to identify the language.</li>
+          <li>Using the wrong file path to the VTT file.</li>
+          <li>Using <code>kind="captions"</code> instead of <code>kind="subtitles"</code> — they have different semantics.</li>
+          <li>Not setting the default track with the <code>default</code> attribute.</li>
+        </ul>
+
+        <div class="bg-brand/5 border border-brand/20 rounded-3xl p-8 text-center mt-12">
+          <h3 class="font-black text-xl mb-2">Try it now — free & private</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">No uploads. No account. Works in your browser.</p>
+          <a href="/srt-to-vtt/" class="inline-flex items-center gap-2 bg-brand text-white font-bold px-6 py-3 rounded-2xl hover:bg-indigo-700 transition-colors">
+            Convert SRT to VTT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initLayout } from '/components/layout.js';
+    initLayout({ pageTitle: 'Blog' });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>
