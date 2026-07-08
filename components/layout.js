@@ -71,20 +71,22 @@ export function initLayout(options = {}) {
   const audioMenu = (TOOLS.audio || []).map(t => toolLink(t)).join('');
 
   const moreToolCategories = [
-    { label: 'Data', items: TOOLS.data },
+    { label: 'Data', items: [...(TOOLS.data || []), ...(TOOLS.dev || [])] },
     { label: 'Subtitles & Fonts', items: [...(TOOLS.subtitles || []), ...(TOOLS.fonts || [])] },
     { label: 'Icons, Calendar & AI', items: [...(TOOLS.icons || []), ...(TOOLS.calendar || []), ...(TOOLS.utilities || []), ...(TOOLS.ai || [])] }
   ];
 
-  const moreToolsMenuHtml = `
-    <div class="absolute top-full right-0 mt-2 w-[640px] max-md:w-[calc(100vw-3rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 grid grid-cols-3 max-md:grid-cols-1 gap-6 hidden" id="moreToolsMenu">
+    const moreToolsMenuHtml = `
+    <div id="moreToolsMenu" class="absolute top-full right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 flex flex-col gap-4 hidden z-50" 
+         style="width: 290px !important; max-height: 550px !important; overflow-y: auto !important;">
       ${moreToolCategories.map(cat => `
-        <div>
-          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">${cat.label}</div>
+        <div class="flex flex-col" style="width: 100% !important;">
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 border-b border-slate-100 dark:border-slate-800 pb-1">${cat.label}</div>
           ${cat.items.map(t => `
-            <a href="${t.href}" class="flex items-center gap-2 py-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand transition-colors">
+            <a href="${t.href}" class="flex items-center gap-2 py-1 px-2 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" 
+               style="white-space: nowrap !important; display: flex !important; width: 100% !important; margin-bottom: 6px !important;">
               <i data-lucide="${t.icon}" class="w-3.5 h-3.5 text-brand flex-shrink-0"></i>
-              ${t.title}
+              <span>${t.title}</span>
             </a>
           `).join('')}
         </div>
@@ -197,6 +199,16 @@ export function initLayout(options = {}) {
       document.body.prepend(header);
     }
     document.body.appendChild(footer);
+
+    const scrollbarStyle = document.createElement('style');
+    scrollbarStyle.textContent = `
+      #moreToolsMenu { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+      #moreToolsMenu::-webkit-scrollbar { width: 6px; }
+      #moreToolsMenu::-webkit-scrollbar-track { background: transparent; }
+      #moreToolsMenu::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
+      #moreToolsMenu::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+    `;
+    document.head.appendChild(scrollbarStyle);
 
     bindThemeToggle();
 
