@@ -12,7 +12,9 @@ export const TOOLS = {
     { href: '/gif-to-png/', title: 'GIF to PNG', icon: 'image', key: 'gif-to-png' },
     { href: '/svg-to-png/', title: 'SVG to PNG', icon: 'pen-tool', key: 'svg-to-png' },
     { href: '/heic-to-jpg/', title: 'HEIC to JPG', icon: 'smartphone', key: 'heic-to-jpg' },
-    { href: '/heic-to-png/', title: 'HEIC to PNG', icon: 'smartphone', key: 'heic-to-png' }
+    { href: '/heic-to-png/', title: 'HEIC to PNG', icon: 'smartphone', key: 'heic-to-png' },
+    { href: '/avif-to-jpg/', title: 'AVIF to JPG', icon: 'image', key: 'avif-to-jpg' },
+    { href: '/avif-to-png/', title: 'AVIF to PNG', icon: 'image', key: 'avif-to-png' }
   ],
   documents: [
     { href: '/jpg-to-pdf/', title: 'JPG to PDF', icon: 'file-text', key: 'jpg-to-pdf' },

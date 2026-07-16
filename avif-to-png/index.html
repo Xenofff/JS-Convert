@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://cloud.umami.is" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>AVIF to PNG Converter — Free, Private, No Upload | JS-Convert</title>
+  <meta name="description" content="Convert AVIF images to PNG online for free. 100% private — files never leave your browser. No upload, no account needed." />
+  <link rel="canonical" href="https://jsconvert.site/avif-to-png/" />
+  <meta property="og:title" content="AVIF to PNG Converter" />
+  <meta property="og:description" content="Free browser-based AVIF to PNG conversion. Instant, private, no server." />
+
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" /></noscript>
+
+  <style>
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;transition:background-color .3s,color .3s}
+    details.seo-faq summary::-webkit-details-marker{display:none}
+    details.seo-faq summary::marker{content:''}
+    .glass{background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+    .dark .glass{background:rgba(17,24,39,.8)}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-brand to-violet-500 bg-clip-text text-transparent">AVIF to PNG Converter</h1>
+      <p id="subtitle" class="text-slate-500 dark:text-slate-400 font-medium">Convert AVIF images to PNG instantly in your browser. Private by default — no files are uploaded.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+      <div class="p-8 md:p-12">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div id="dropzone" class="relative group cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 transition-all duration-300 hover:border-brand hover:bg-brand/5 flex flex-col items-center justify-center min-h-[240px]">
+            <input type="file" id="fileInput" class="hidden" multiple />
+            <div id="dropzoneIconWrap" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand group-hover:scale-110 transition-all duration-300 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+            </div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">Drag & drop AVIF files here or click to browse</p>
+            <div id="filesList" class="mt-4 w-full max-h-36 overflow-y-auto space-y-1 hidden"></div>
+            <p id="fileCountDisplay" class="mt-2 text-xs font-bold text-brand bg-brand/10 px-3 py-1 rounded-full hidden"></p>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="block text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Output</label>
+              <div class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 font-bold">PNG</div>
+            </div>
+            <button id="convertBtn" class="w-full bg-brand hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/25 transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+              <span>Convert</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <div id="conversionStatus" class="text-xs text-slate-500 dark:text-slate-400 text-center hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+        <div id="progressInner" class="h-full bg-brand transition-all duration-500 ease-out" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section class="seo-content mt-14">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+        <h2 class="text-xl font-black">What is AVIF?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          AVIF (AV1 Image File Format) is a modern image format developed by the Alliance for Open Media. It delivers superior compression compared to JPEG, PNG, and even WebP — producing smaller files at the same visual quality. AVIF is increasingly adopted by leading websites and streaming platforms for optimized image delivery.
+        </p>
+        <h2 class="text-xl font-black pt-4">How to convert AVIF to PNG</h2>
+        <ol class="list-decimal ml-5 space-y-2 text-slate-600 dark:text-slate-300 font-medium">
+          <li>Drop your AVIF image or select it with Browse</li>
+          <li>Click Convert — processing runs locally in your browser</li>
+          <li>Download the PNG file (or a ZIP for batch conversions)</li>
+        </ol>
+        <h2 class="text-xl font-black pt-4">Why convert AVIF to PNG?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Many older applications, design tools, and upload forms still don't support AVIF. PNG is lossless and universally supported — making it a dependable format for design work, documentation, and platforms that require a standard image format.
+        </p>
+        <h2 class="text-xl font-black pt-4">Is this converter safe?</h2>
+        <p class="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Yes. JS-Convert never uploads your files. Conversion happens entirely on your device using JavaScript.
+        </p>
+        <h2 class="text-xl font-black pt-4">AVIF vs PNG — quick comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-50 dark:bg-slate-800">
+              <tr><th class="px-4 py-3 font-black">Feature</th><th class="px-4 py-3 font-black">AVIF</th><th class="px-4 py-3 font-black">PNG</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr><td class="px-4 py-3 font-bold">Typical file size</td><td class="px-4 py-3">Very small</td><td class="px-4 py-3">Often large</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Compression</td><td class="px-4 py-3">Lossy or lossless</td><td class="px-4 py-3">Lossless only</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Transparency</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Yes</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Software support</td><td class="px-4 py-3">Growing</td><td class="px-4 py-3">Universal</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Best for</td><td class="px-4 py-3">Modern web optimization</td><td class="px-4 py-3">Design &amp; publishing</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2 class="text-xl font-black pt-4">Frequently asked questions</h2>
+        <div class="space-y-3">
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Is AVIF better than PNG?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">AVIF typically produces much smaller files than PNG, especially for photographic content. PNG uses lossless compression and retains every pixel, but at the cost of significantly larger file sizes.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Which browsers support AVIF?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">AVIF is supported in Chrome, Firefox, Edge, and recent versions of Safari (16.4+). Older browsers and some mobile apps may not render AVIF images.</p>
+          </details>
+          <details class="seo-faq bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="cursor-pointer list-none px-5 py-4 font-bold text-sm">Will converting AVIF to PNG increase file size?</summary>
+            <p class="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 font-medium border-t border-slate-200 dark:border-slate-700 pt-3">Yes, in most cases. PNG is lossless and doesn't compress photographic content as efficiently as AVIF. The trade-off is universal compatibility and pixel-perfect reproduction.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initConverterPage } from '/components/converter-page.js';
+    import { avifToImageBlob } from '/converters/avif.js';
+
+    initConverterPage({
+      pageTitle: 'AVIF to PNG Converter',
+      subtitle: 'Convert AVIF images to PNG instantly in your browser. Private by default — no files are uploaded.',
+      accept: '.avif,image/avif',
+      outputMime: 'image/png',
+      outputExt: '.png',
+      perFileConvert: async (file) => {
+        try {
+          return await avifToImageBlob(file, 'image/png');
+        } catch (err) {
+          const el = document.getElementById('conversionStatus');
+          if (el) { el.textContent = err.message; el.classList.remove('hidden'); }
+          throw err;
+        }
+      }
+    });
+  </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bac2cdea-42cc-4460-a89e-85c682b54c67"></script>
+</body>
+</html>
